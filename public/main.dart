@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tradingkafundaadmin/screens/addCompany.dart';
-import 'package:tradingkafundaadmin/screens/loginPage.dart';
 import 'package:tradingkafundaadmin/screens/manageMarketData.dart';
 import 'package:tradingkafundaadmin/screens/viewCompany.dart';
 
@@ -16,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoginPage(),
+      home: MyHomePage(title: 'Trading Ka Funda Admin'),
     );
   }
 }

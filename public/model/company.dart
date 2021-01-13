@@ -3,11 +3,6 @@ part of model;
 class Company {
   String companyName;
   String shortName;
-  List<String> marketsList;
-
-  List get getMarketsList => marketsList;
-
-  set setMarketsList(List marketsList) => this.marketsList = marketsList;
 
   String getCompanyName() {
     return companyName;
