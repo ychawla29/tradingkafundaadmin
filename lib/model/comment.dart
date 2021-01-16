@@ -2,7 +2,7 @@ part of model;
 
 class Comment {
   String comment;
-  DateTime dateTime;
+  String dateTime;
 
   String getCommand() {
     return comment;
@@ -12,13 +12,17 @@ class Comment {
     this.comment = comment;
   }
 
-  DateTime getDateTime() {
+  String getDateTime() {
     return dateTime;
   }
 
-  void setDateTime(DateTime dateTime) {
+  void setDateTime(String dateTime) {
     this.dateTime = dateTime;
   }
 
   Comment(this.comment, this.dateTime);
+
+  Map<String, dynamic> toMap() {
+    return {"comment": comment, "time": dateTime};
+  }
 }

@@ -110,8 +110,9 @@ class ViewCompany extends StatelessWidget {
                   }
                   return Container(
                     alignment: Alignment.center,
-                    child: CupertinoActivityIndicator(
-                      animating: true,
+                    child: CircularProgressIndicator(
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(ColorValues.blue),
                     ),
                   );
                 }),

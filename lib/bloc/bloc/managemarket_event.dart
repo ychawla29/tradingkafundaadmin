@@ -22,3 +22,11 @@ class UpdateManageData extends ManagemarketEvent {
 
   UpdateManageData(this.updatedData);
 }
+
+class ResetMarketData extends ManagemarketEvent {}
+
+class RefreshMarketData extends ManagemarketEvent {
+  final MarketTypeData updatedData;
+
+  RefreshMarketData(this.updatedData);
+}

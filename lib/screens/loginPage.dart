@@ -11,7 +11,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String email, password;
-
+  bool obscureText = true;
   final formKey = new GlobalKey<FormState>();
 
   checkFields() {
@@ -68,8 +68,16 @@ class _LoginPageState extends State<LoginPage> {
                         child: Container(
                           height: 50.0,
                           child: TextFormField(
-                            obscureText: true,
-                            decoration: InputDecoration(hintText: 'Password'),
+                            obscureText: obscureText,
+                            decoration: InputDecoration(
+                                hintText: 'Password',
+                                suffixIcon: IconButton(
+                                  icon: Icon(Icons.remove_red_eye),
+                                  onPressed: () {
+                                    obscureText = !obscureText;
+                                    setState(() {});
+                                  },
+                                )),
                             validator: (value) =>
                                 value.isEmpty ? 'Password is required' : null,
                             onChanged: (value) {

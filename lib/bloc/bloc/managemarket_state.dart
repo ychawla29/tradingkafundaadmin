@@ -13,3 +13,11 @@ class ManagemarketLoaded extends ManagemarketState {
   ManagemarketLoaded(this.marketDataList, this.selectedIndex,
       {this.selectedData, this.message});
 }
+
+class ManagemarketResetState extends ManagemarketState {
+  final List<Map<String, List<MarketTypeData>>> marketDataList;
+  final int selectedIndex;
+  final MarketTypeData selectedData;
+
+  ManagemarketResetState({@required this.marketDataList, this.selectedIndex, this.selectedData});
+}

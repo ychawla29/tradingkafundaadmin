@@ -153,6 +153,12 @@ class _AddCompanyState extends State<AddCompany> {
         if (state is AddcompanyLoadedState) {
           nameController.text = "";
           shortNameController.text = "";
+          equity = false;
+          commodity = false;
+          forex = false;
+          future = false;
+          option = false;
+
           Toast.show('Company details added successfully', context,
               backgroundColor: Colors.blue,
               textColor: Colors.white,
