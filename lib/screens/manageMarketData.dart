@@ -173,9 +173,12 @@ class _ManageScreenState extends State<ManageScreen> {
                   state.selectedData.targetList[2]["value"].toString();
               editingControllerStopLoss.text =
                   state.selectedData.targetList[3]["value"].toString();
-
-              editingControllerEntryRate.text =
-                  state.selectedData.entryRate.toString();
+              if (state.selectedData.entryRate == 0) {
+                editingControllerEntryRate.text = "";
+              } else {
+                editingControllerEntryRate.text =
+                    state.selectedData.entryRate.toString();
+              }
             } else {
               checkedTypeBuy = true;
               editingControllerTarget1.text = "";
@@ -425,6 +428,8 @@ class _ManageScreenState extends State<ManageScreen> {
                                     checkedTarget2 = true;
                                     checkedTarget1 = true;
                                     checkedTypeClosed = true;
+                                    checkedTypeBuy = false;
+                                    checkedTypeSell = false;
                                   });
                                 },
                               )
@@ -441,7 +446,8 @@ class _ManageScreenState extends State<ManageScreen> {
                                 value: checkedStopLoss,
                                 onChanged: (newValue) {
                                   setState(() {
-                                    checkedStopLoss = newValue;
+                                    if (!checkedTarget3)
+                                      checkedStopLoss = newValue;
                                   });
                                 },
                               )
@@ -652,7 +658,6 @@ class _ManageScreenState extends State<ManageScreen> {
                                       element.keys.first == newValue)));
                           setState(() {
                             dropdownValue1 = newValue;
-
                             dropdownValue = null;
                           });
                         },
@@ -681,20 +686,16 @@ class _ManageScreenState extends State<ManageScreen> {
                         }).toList(),
                         hint: Text("Select Market Type"),
                         onChanged: (newValue) {
-                          BlocProvider.of<ManagemarketBloc>(context).add(
-                              SetSelectedData(state
-                                  .marketDataList[state.selectedIndex].values
-                                  .where((element) =>
-                                      element
-                                          .where((element) =>
-                                              element.marketTypeName ==
-                                              newValue)
-                                          .toList()
-                                          .first !=
-                                      null)
-                                  .toList()
-                                  .first
-                                  .first));
+                          MarketTypeData marketTypeData;
+                          for (var marketType in state
+                              .marketDataList[state.selectedIndex].values) {
+                            for (var market in marketType) {
+                              if (market.marketTypeName == newValue)
+                                marketTypeData = market;
+                            }
+                          }
+                          BlocProvider.of<ManagemarketBloc>(context)
+                              .add(SetSelectedData(marketTypeData));
                           setState(() {
                             dropdownValue = newValue;
                           });
@@ -727,10 +728,11 @@ class _ManageScreenState extends State<ManageScreen> {
                               Checkbox(
                                 value: checkedTypeBuy,
                                 onChanged: (newValue) {
-                                  state.selectedData.callType = 0;
-                                  BlocProvider.of<ManagemarketBloc>(context)
-                                      .add(RefreshMarketData(
-                                          state.selectedData));
+                                  setState(() {
+                                    checkedTypeBuy = true;
+                                    checkedTypeClosed = false;
+                                    checkedTypeSell = false;
+                                  });
                                 },
                               )
                             ],
@@ -747,10 +749,11 @@ class _ManageScreenState extends State<ManageScreen> {
                               Checkbox(
                                 value: checkedTypeSell,
                                 onChanged: (newValue) {
-                                  state.selectedData.callType = 1;
-                                  BlocProvider.of<ManagemarketBloc>(context)
-                                      .add(RefreshMarketData(
-                                          state.selectedData));
+                                  setState(() {
+                                    checkedTypeSell = true;
+                                    checkedTypeBuy = false;
+                                    checkedTypeClosed = false;
+                                  });
                                 },
                               )
                             ],
@@ -767,10 +770,11 @@ class _ManageScreenState extends State<ManageScreen> {
                               Checkbox(
                                 value: checkedTypeClosed,
                                 onChanged: (newValue) {
-                                  state.selectedData.callType = 2;
-                                  BlocProvider.of<ManagemarketBloc>(context)
-                                      .add(RefreshMarketData(
-                                          state.selectedData));
+                                  setState(() {
+                                    checkedTypeClosed = true;
+                                    checkedTypeBuy = false;
+                                    checkedTypeSell = false;
+                                  });
                                 },
                               )
                             ],
@@ -822,7 +826,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                 onChanged: (newValue) {
                                   setState(() {
                                     checkedTarget2 = newValue;
-                                    checkedTarget1 = newValue;
+                                    checkedTarget1 = true;
                                   });
                                 },
                               )
@@ -840,8 +844,11 @@ class _ManageScreenState extends State<ManageScreen> {
                                 onChanged: (newValue) {
                                   setState(() {
                                     checkedTarget3 = newValue;
-                                    checkedTarget1 = newValue;
-                                    checkedTarget2 = newValue;
+                                    checkedTarget2 = true;
+                                    checkedTarget1 = true;
+                                    checkedTypeClosed = true;
+                                    checkedTypeBuy = false;
+                                    checkedTypeSell = false;
                                   });
                                 },
                               )
@@ -858,7 +865,8 @@ class _ManageScreenState extends State<ManageScreen> {
                                 value: checkedStopLoss,
                                 onChanged: (newValue) {
                                   setState(() {
-                                    checkedStopLoss = newValue;
+                                    if (!checkedTarget3)
+                                      checkedStopLoss = newValue;
                                   });
                                 },
                               )
@@ -958,7 +966,10 @@ class _ManageScreenState extends State<ManageScreen> {
                                     state.selectedData.companyID;
                                 marketTypeData.marketTypeId =
                                     state.selectedData.marketTypeId;
+                                marketTypeData.marketTypeName =
+                                    state.selectedData.marketTypeName;
                                 marketTypeData.docId = state.selectedData.docId;
+                                marketTypeData.isNew = false;
                                 if (checkedTypeBuy) marketTypeData.callType = 0;
                                 if (checkedTypeSell)
                                   marketTypeData.callType = 1;
@@ -991,8 +1002,9 @@ class _ManageScreenState extends State<ManageScreen> {
                                 });
                                 marketTypeData.entryRate = double.parse(
                                     editingControllerEntryRate.text);
-                                BlocProvider.of<ManagemarketBloc>(context)
-                                    .add(UpdateManageData(marketTypeData));
+                                BlocProvider.of<ManagemarketBloc>(context).add(
+                                    UpdateManageData(marketTypeData,
+                                        marketTypeName: dropdownValue));
                               },
                               icon: Icon(
                                 Icons.update,

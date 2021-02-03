@@ -1,9 +1,15 @@
 part of 'managemarket_bloc.dart';
 
-@immutable
-abstract class ManagemarketState {}
+abstract class ManagemarketState extends Equatable {
+  const ManagemarketState();
+  @override
+  List<Object> get props => [];
+}
 
-class ManagemarketInitial extends ManagemarketState {}
+class ManagemarketInitial extends ManagemarketState {
+  @override
+  List<Object> get props => [];
+}
 
 class ManagemarketLoaded extends ManagemarketState {
   final List<Map<String, List<MarketTypeData>>> marketDataList;
@@ -12,6 +18,9 @@ class ManagemarketLoaded extends ManagemarketState {
   final String message;
   ManagemarketLoaded(this.marketDataList, this.selectedIndex,
       {this.selectedData, this.message});
+
+  @override
+  List<Object> get props => [marketDataList, selectedIndex, selectedData, message];
 }
 
 class ManagemarketResetState extends ManagemarketState {
@@ -19,5 +28,9 @@ class ManagemarketResetState extends ManagemarketState {
   final int selectedIndex;
   final MarketTypeData selectedData;
 
-  ManagemarketResetState({@required this.marketDataList, this.selectedIndex, this.selectedData});
+  ManagemarketResetState(
+      {@required this.marketDataList, this.selectedIndex, this.selectedData});
+
+  @override
+  List<Object> get props => [marketDataList, selectedIndex, selectedData];
 }
