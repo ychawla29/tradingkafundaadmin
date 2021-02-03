@@ -181,6 +181,8 @@ class _ManageScreenState extends State<ManageScreen> {
               }
             } else {
               checkedTypeBuy = true;
+              checkedTypeSell = false;
+              checkedTypeClosed = false;
               editingControllerTarget1.text = "";
               editingControllerTarget2.text = "";
               editingControllerTarget3.text = "";
@@ -430,6 +432,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                     checkedTypeClosed = true;
                                     checkedTypeBuy = false;
                                     checkedTypeSell = false;
+                                    checkedStopLoss = false;
                                   });
                                 },
                               )
@@ -849,6 +852,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                     checkedTypeClosed = true;
                                     checkedTypeBuy = false;
                                     checkedTypeSell = false;
+                                    checkedStopLoss = false;
                                   });
                                 },
                               )
