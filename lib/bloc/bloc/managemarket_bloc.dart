@@ -11,10 +11,11 @@ part 'managemarket_state.dart';
 class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
   ManagemarketBloc() : super(ManagemarketInitial());
 
-  List<Map<String, List<MarketTypeData>>> marketDataList = List();
   var firestore = FirebaseFirestore.instance;
+  List<Map<String, List<MarketTypeData>>> marketDataList = List();
   MarketTypeData selectedData;
   int selectedIndex;
+
   @override
   Stream<ManagemarketState> mapEventToState(
     ManagemarketEvent event,
@@ -49,19 +50,21 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
   Stream<ManagemarketState> resetMarketData(ResetMarketData event) async* {
     yield ManagemarketInitial();
     selectedData.callType = 0;
-    selectedData.targetList[0]["value"] = 0.0;
+    selectedData.targetList[0]["value"] = "";
     selectedData.targetList[0]["isAchieved"] = false;
 
-    selectedData.targetList[1]["value"] = 0.0;
+    selectedData.targetList[1]["value"] = "";
     selectedData.targetList[1]["isAchieved"] = false;
 
-    selectedData.targetList[2]["value"] = 0.0;
+    selectedData.targetList[2]["value"] = "";
     selectedData.targetList[2]["isAchieved"] = false;
 
-    selectedData.targetList[3]["value"] = 0.0;
+    selectedData.targetList[3]["value"] = "";
     selectedData.targetList[3]["isAchieved"] = false;
 
-    selectedData.entryRate = 0.0;
+    selectedData.commentList = List();
+
+    selectedData.entryRate = 0;
     yield ManagemarketResetState(
         marketDataList: marketDataList,
         selectedData: selectedData,
@@ -129,7 +132,7 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
     print(
         "marketType/${event.updatedData.marketTypeId}/data/${event.updatedData.docId}");
     if (selectedData.isNew) {
-      List<Map<String, dynamic>> commentList = List();
+      List<dynamic> commentList = List();
       if (event.updatedData.targetList[0]["isAchieved"]) {
         if (event.updatedData.targetList[1]["isAchieved"]) {
           if (event.updatedData.targetList[2]["isAchieved"]) {
@@ -163,43 +166,34 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         "targetList": event.updatedData.targetList,
         "updatedOn": DateTime.now().toString(),
       });
-      marketDataList[selectedIndex]
-          .values
-          .where((element) =>
-              element
-                  .where((element) =>
-                      element.companyID == event.updatedData.companyID)
-                  .toList()
-                  .first !=
-              null)
-          .toList()
-          .first
-          .first = event.updatedData;
+      for (var marketType in marketDataList[selectedIndex].values) {
+        for (var market in marketType) {
+          if (market.marketTypeName == event.marketTypeName)
+            market = event.updatedData;
+        }
+      }
     } else {
-      List<Map<String, dynamic>> commentList = List();
+      List<dynamic> commentList = selectedData.commentList;
       if (selectedData.targetList[0]["isAchieved"]) {
         if (selectedData.targetList[1]["isAchieved"]) {
-          if (selectedData.targetList[2]["isAchieved"]) {}
+          if (event.updatedData.targetList[2]["isAchieved"]) {
+            commentList.add("All Targets Achieved, Call Closed");
+            event.updatedData.callType = 2;
+          }
         } else {
           if (event.updatedData.targetList[1]["isAchieved"]) {
             if (event.updatedData.targetList[2]["isAchieved"]) {
-              commentList.add(Comment("Target 2 and 3 Achieved, Call Closed",
-                      DateTime.now().toString())
-                  .toMap());
+              commentList.add("All Targets Achieved, Call Closed");
               event.updatedData.callType = 2;
             } else {
-              commentList.add(
-                  Comment("Target 2 Achieved", DateTime.now().toString())
-                      .toMap());
+              commentList.add("Target 2 Achieved");
             }
           }
         }
+      } else {
+        if (event.updatedData.targetList[0]["isAchieved"]) {}
       }
-      if (event.updatedData.targetList[0]["isAchieved"]) {
-        commentList.add(
-            Comment("Target 1 Achieved", DateTime.now().toString()).toMap());
-      }
-      if (event.updatedData.targetList[3]["isAchived"]) {
+      if (event.updatedData.targetList[3]["isAchieved"]) {
         commentList.add(
             Comment("Stop Loss Hit, Call Closed", DateTime.now().toString())
                 .toMap());
@@ -215,18 +209,15 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         "targetList": event.updatedData.targetList,
         "updatedOn": DateTime.now().toString(),
       });
-      marketDataList[selectedIndex]
-          .values
-          .where((element) =>
-              element
-                  .where((element) =>
-                      element.companyID == event.updatedData.companyID)
-                  .toList()
-                  .first !=
-              null)
-          .toList()
-          .first
-          .first = event.updatedData;
+      for (var marketType in marketDataList[selectedIndex].values) {
+        for (var market in marketType) {
+          if (market.marketTypeName == event.marketTypeName) {
+            print(
+                "Event: ${event.marketTypeName}, Market: ${market.marketTypeName}");
+            market = event.updatedData;
+          }
+        }
+      }
     }
     yield ManagemarketLoaded(marketDataList, 0, message: "List Updated");
   }

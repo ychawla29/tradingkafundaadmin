@@ -19,8 +19,8 @@ class SetSelectedData extends ManagemarketEvent {
 
 class UpdateManageData extends ManagemarketEvent {
   final MarketTypeData updatedData;
-
-  UpdateManageData(this.updatedData);
+  final String marketTypeName;
+  UpdateManageData(this.updatedData, {this.marketTypeName});
 }
 
 class ResetMarketData extends ManagemarketEvent {}

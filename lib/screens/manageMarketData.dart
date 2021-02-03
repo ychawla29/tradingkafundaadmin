@@ -119,11 +119,11 @@ class _ManageScreenState extends State<ManageScreen> {
                       checkedTarget2 = false;
                       checkedTarget3 = false;
                       checkedStopLoss = false;
-                      editingControllerEntryRate.text = "0.0";
-                      editingControllerStopLoss.text = "0.0";
-                      editingControllerTarget1.text = "0.0";
-                      editingControllerTarget2.text = "0.0";
-                      editingControllerTarget3.text = "0.0";
+                      editingControllerEntryRate.text = "";
+                      editingControllerStopLoss.text = "";
+                      editingControllerTarget1.text = "";
+                      editingControllerTarget2.text = "";
+                      editingControllerTarget3.text = "";
                     });
                   },
                   icon: Icon(
@@ -178,11 +178,11 @@ class _ManageScreenState extends State<ManageScreen> {
                   state.selectedData.entryRate.toString();
             } else {
               checkedTypeBuy = true;
-              editingControllerTarget1.text = "0.0";
-              editingControllerTarget2.text = "0.0";
-              editingControllerTarget3.text = "0.0";
-              editingControllerStopLoss.text = "0.0";
-              editingControllerEntryRate.text = "0.0";
+              editingControllerTarget1.text = "";
+              editingControllerTarget2.text = "";
+              editingControllerTarget3.text = "";
+              editingControllerStopLoss.text = "";
+              editingControllerEntryRate.text = "";
             }
           }
         } else if (state is ManagemarketResetState) {
@@ -193,11 +193,11 @@ class _ManageScreenState extends State<ManageScreen> {
           checkedTypeBuy = false;
           checkedTypeClosed = false;
           checkedTypeSell = false;
-          editingControllerEntryRate.text = "0.0";
-          editingControllerStopLoss.text = "0.0";
-          editingControllerTarget1.text = "0.0";
-          editingControllerTarget2.text = "0.0";
-          editingControllerTarget3.text = "0.0";
+          editingControllerEntryRate.text = "";
+          editingControllerStopLoss.text = "";
+          editingControllerTarget1.text = "";
+          editingControllerTarget2.text = "";
+          editingControllerTarget3.text = "";
         }
       },
       builder: (context, state) {
@@ -404,6 +404,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                 onChanged: (newValue) {
                                   setState(() {
                                     checkedTarget2 = newValue;
+                                    checkedTarget1 = true;
                                   });
                                 },
                               )
@@ -421,6 +422,9 @@ class _ManageScreenState extends State<ManageScreen> {
                                 onChanged: (newValue) {
                                   setState(() {
                                     checkedTarget3 = newValue;
+                                    checkedTarget2 = true;
+                                    checkedTarget1 = true;
+                                    checkedTypeClosed = true;
                                   });
                                 },
                               )
@@ -573,8 +577,9 @@ class _ManageScreenState extends State<ManageScreen> {
                                 });
                                 marketTypeData.entryRate = double.parse(
                                     editingControllerEntryRate.text);
-                                BlocProvider.of<ManagemarketBloc>(context)
-                                    .add(UpdateManageData(marketTypeData));
+                                BlocProvider.of<ManagemarketBloc>(context).add(
+                                    UpdateManageData(marketTypeData,
+                                        marketTypeName: dropdownValue));
                               },
                               icon: Icon(
                                 Icons.update,
@@ -647,6 +652,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                       element.keys.first == newValue)));
                           setState(() {
                             dropdownValue1 = newValue;
+
                             dropdownValue = null;
                           });
                         },
@@ -742,7 +748,9 @@ class _ManageScreenState extends State<ManageScreen> {
                                 value: checkedTypeSell,
                                 onChanged: (newValue) {
                                   state.selectedData.callType = 1;
-                                  setState(() {});
+                                  BlocProvider.of<ManagemarketBloc>(context)
+                                      .add(RefreshMarketData(
+                                          state.selectedData));
                                 },
                               )
                             ],
@@ -814,6 +822,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                 onChanged: (newValue) {
                                   setState(() {
                                     checkedTarget2 = newValue;
+                                    checkedTarget1 = newValue;
                                   });
                                 },
                               )
@@ -831,6 +840,8 @@ class _ManageScreenState extends State<ManageScreen> {
                                 onChanged: (newValue) {
                                   setState(() {
                                     checkedTarget3 = newValue;
+                                    checkedTarget1 = newValue;
+                                    checkedTarget2 = newValue;
                                   });
                                 },
                               )
