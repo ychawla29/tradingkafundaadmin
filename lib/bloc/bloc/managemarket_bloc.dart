@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/semantics.dart';
 import 'package:meta/meta.dart';
 import 'package:tradingkafundaadmin/model/model.dart';
 
@@ -135,7 +134,8 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         "marketType/${event.updatedData.marketTypeId}/data/${event.updatedData.docId}");
     if (selectedData.isNew) {
       List<dynamic> commentList = List();
-      if (event.updatedData.targetList[0]["isAchieved"]) {
+      if (event.updatedData.targetList[0]["isAchieved"] != null &&
+          event.updatedData.targetList[0]["isAchieved"]) {
         if (event.updatedData.targetList[1]["isAchieved"]) {
           if (event.updatedData.targetList[2]["isAchieved"]) {
             commentList.add(Comment("All Targets Achieved, Call Closed",
@@ -151,7 +151,8 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
           commentList.add(
               Comment("Target 1 Achieved", DateTime.now().toString()).toMap());
         }
-      } else if (event.updatedData.targetList[3]["isAchived"]) {
+      } else if (event.updatedData.targetList[3]["isAchived"] != null &&
+          event.updatedData.targetList[3]["isAchived"]) {
         commentList.add(
             Comment("Stop Loss hit, Call Closed", DateTime.now().toString())
                 .toMap());
@@ -168,10 +169,20 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         "targetList": event.updatedData.targetList,
         "updatedOn": DateTime.now().toString(),
       });
-      for (var marketType in marketDataList[selectedIndex].values) {
-        for (var market in marketType) {
-          if (market.marketTypeName == event.marketTypeName)
-            market = event.updatedData;
+      for (int i = 0;
+          i < marketDataList[selectedIndex].values.toList().length;
+          i++) {
+        for (int j = 0;
+            j < marketDataList[selectedIndex].values.toList()[i].length;
+            j++) {
+          if (marketDataList[selectedIndex]
+                  .values
+                  .toList()[i][j]
+                  .marketTypeName ==
+              event.marketTypeName) {
+            marketDataList[selectedIndex].values.toList()[i][j] =
+                event.updatedData;
+          }
         }
       }
     } else {

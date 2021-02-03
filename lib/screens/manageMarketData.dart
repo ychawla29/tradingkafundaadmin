@@ -183,6 +183,10 @@ class _ManageScreenState extends State<ManageScreen> {
               checkedTypeBuy = true;
               checkedTypeSell = false;
               checkedTypeClosed = false;
+              checkedTarget1 = false;
+              checkedTarget2 = false;
+              checkedTarget3 = false;
+              checkedStopLoss = false;
               editingControllerTarget1.text = "";
               editingControllerTarget2.text = "";
               editingControllerTarget3.text = "";
