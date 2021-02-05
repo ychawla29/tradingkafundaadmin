@@ -187,6 +187,9 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
       }
     } else {
       List<dynamic> commentList = selectedData.commentList;
+      if (commentList == null) {
+        commentList = List();
+      }
       if (selectedData.targetList[0]["isAchieved"]) {
         if (selectedData.targetList[1]["isAchieved"]) {
           if (event.updatedData.targetList[2]["isAchieved"]) {
