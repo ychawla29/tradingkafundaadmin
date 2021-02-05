@@ -62918,6 +62918,7 @@ case 7:for(k=m.Q,i=a.b,h=0;h<J.k_(J.fe(k[m.cx])).length;++h)for(g=0;g<J.bP(J.k_(
 s=5
 break
 case 6:j=k.d
+if(j==null)j=[]
 if(J.R(J.R(k.c,0),"isAchieved")){if(J.R(J.R(m.ch.c,1),"isAchieved")){if(J.R(J.R(l.c,2),"isAchieved")){J.eb(j,"All Targets Achieved, Call Closed")
 l.e=2}}else if(J.R(J.R(l.c,1),"isAchieved")){k=J.bS(j)
 if(J.R(J.R(l.c,2),"isAchieved")){k.D(j,"All Targets Achieved, Call Closed")
