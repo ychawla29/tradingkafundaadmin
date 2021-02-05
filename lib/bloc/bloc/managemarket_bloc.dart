@@ -193,16 +193,25 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
       if (selectedData.targetList[0]["isAchieved"]) {
         if (selectedData.targetList[1]["isAchieved"]) {
           if (event.updatedData.targetList[2]["isAchieved"]) {
-            commentList.add("All Targets Achieved, Call Closed");
+            commentList.add({
+              "comment": "All Targets Achieved, Call Closed",
+              "time": DateTime.now().toString()
+            });
             event.updatedData.callType = 2;
           }
         } else {
           if (event.updatedData.targetList[1]["isAchieved"]) {
             if (event.updatedData.targetList[2]["isAchieved"]) {
-              commentList.add("All Targets Achieved, Call Closed");
+              commentList.add({
+                "comment": "All Targets Achieved, Call Closed",
+                "time": DateTime.now().toString()
+              });
               event.updatedData.callType = 2;
             } else {
-              commentList.add("Target 2 Achieved");
+              commentList.add({
+                "comment": "Target 2 Achieved",
+                "time": DateTime.now().toString()
+              });
             }
           }
         }
