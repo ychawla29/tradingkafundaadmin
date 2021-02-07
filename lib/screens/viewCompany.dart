@@ -2,8 +2,12 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tradingkafundaadmin/bloc/bloc/editcompany_bloc.dart';
 import 'package:tradingkafundaadmin/color/colors.dart';
+import 'package:tradingkafundaadmin/screens/editCompany.dart';
 
 List<Color> colorList = [
   Colors.blue,
@@ -73,10 +77,68 @@ class ViewCompany extends StatelessWidget {
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData)
                                     return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Expanded(
                                             child: Text(
                                                 "Markets : ${snapshot.data.join(", ")}")),
+                                        FlatButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        BlocProvider(
+                                                      create: (context) =>
+                                                          EditcompanyBloc(),
+                                                      child: EditCompany(
+                                                        companyId:
+                                                            dataSnapshots[index]
+                                                                .id,
+                                                        markets: snapshot.data,
+                                                      ),
+                                                    ),
+                                                  ));
+                                            },
+                                            child: Text("Edit")),
+                                        Text(" | "),
+                                        FlatButton(
+                                            onPressed: () {},
+                                            child: Text("Delete"))
+                                        // RichText(
+                                        //   text: TextSpan(children: [
+                                        //     TextSpan(
+                                        //         text: "Edit ",
+                                        //         recognizer:
+                                        //             TapGestureRecognizer()
+                                        //               ..onTap = () {
+                                        //                 Navigator.push(
+                                        //                     context,
+                                        //                     MaterialPageRoute(
+                                        //                       builder: (_) =>
+                                        //                           BlocProvider(
+                                        //                         create: (context) =>
+                                        //                             EditcompanyBloc(),
+                                        //                         child:
+                                        //                             EditCompany(
+                                        //                           companyId:
+                                        //                               dataSnapshots[
+                                        //                                       index]
+                                        //                                   .id,
+                                        //                           markets:
+                                        //                               snapshot
+                                        //                                   .data,
+                                        //                         ),
+                                        //                       ),
+                                        //                     ));
+                                        //               }),
+                                        //     TextSpan(text: " | "),
+                                        //     TextSpan(
+                                        //       text: " Delete",
+                                        //     ),
+                                        //   ]),
+                                        // ),
                                       ],
                                     );
                                   else

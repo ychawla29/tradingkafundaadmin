@@ -169,6 +169,7 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         "targetList": event.updatedData.targetList,
         "updatedOn": DateTime.now().toString(),
       });
+      event.updatedData.commentList = commentList;
       for (int i = 0;
           i < marketDataList[selectedIndex].values.toList().length;
           i++) {
@@ -187,6 +188,7 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
       }
     } else {
       List<dynamic> commentList = selectedData.commentList;
+      print("CommentList: ${selectedData.commentList}");
       if (commentList == null) {
         commentList = List();
       }
@@ -200,6 +202,13 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
             event.updatedData.callType = 2;
           }
         } else {
+          commentList.add({
+            "comment": "Target 2 Achieved",
+            "time": DateTime.now().toString()
+          });
+        }
+      } else {
+        if (event.updatedData.targetList[0]["isAchieved"]) {
           if (event.updatedData.targetList[1]["isAchieved"]) {
             if (event.updatedData.targetList[2]["isAchieved"]) {
               commentList.add({
@@ -209,14 +218,19 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
               event.updatedData.callType = 2;
             } else {
               commentList.add({
-                "comment": "Target 2 Achieved",
+                "comment": "Target 1 and 2 Achieved",
                 "time": DateTime.now().toString()
               });
             }
+          } else {
+            commentList.add({
+              "comment": "Target 1 Achieved",
+              "time": DateTime.now().toString()
+            });
           }
+        } else {
+          event.updatedData.commentList = List();
         }
-      } else {
-        if (event.updatedData.targetList[0]["isAchieved"]) {}
       }
       if (event.updatedData.targetList[3]["isAchieved"]) {
         commentList.add(
@@ -234,6 +248,7 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         "targetList": event.updatedData.targetList,
         "updatedOn": DateTime.now().toString(),
       });
+      event.updatedData.commentList = commentList;
       for (int i = 0;
           i < marketDataList[selectedIndex].values.toList().length;
           i++) {

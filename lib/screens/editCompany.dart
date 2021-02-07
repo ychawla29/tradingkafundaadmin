@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toast/toast.dart';
-import 'package:tradingkafundaadmin/bloc/bloc/addcompany_bloc.dart';
+import 'package:tradingkafundaadmin/bloc/bloc/editcompany_bloc.dart';
 import 'package:tradingkafundaadmin/color/colors.dart';
 import 'package:tradingkafundaadmin/model/model.dart';
 
-class AddCompany extends StatefulWidget {
+class EditCompany extends StatefulWidget {
+  EditCompany({Key key, this.companyId, this.markets}) : super(key: key);
+  final String companyId;
+  final List<String> markets;
   @override
-  _AddCompanyState createState() => _AddCompanyState();
+  _EditCompanyState createState() => _EditCompanyState();
 }
 
-class _AddCompanyState extends State<AddCompany> {
+class _EditCompanyState extends State<EditCompany> {
   var _formKey = GlobalKey<FormState>();
   var nameController = TextEditingController();
   var shortNameController = TextEditingController();
@@ -19,6 +22,13 @@ class _AddCompanyState extends State<AddCompany> {
   bool option = false;
   bool commodity = false;
   bool forex = false;
+
+  @override
+  void initState() {
+    BlocProvider.of<EditcompanyBloc>(context)
+        .add(FetchCompanyDetailsEvent(widget.companyId));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,16 +107,8 @@ class _AddCompanyState extends State<AddCompany> {
                       if (forex) marketslist.add("Forex");
                       if (option) marketslist.add("Options");
                       company.setMarketsList = marketslist;
-                      if (marketslist.isEmpty)
-                        Toast.show('Market type cannot be empty', context,
-                            backgroundColor: Colors.blue,
-                            textColor: Colors.white,
-                            gravity: Toast.BOTTOM,
-                            duration: Toast.LENGTH_SHORT);
-                      else {
-                        BlocProvider.of<AddcompanyBloc>(context)
-                            .add(AddCompanyEvent(company));
-                      }
+                      BlocProvider.of<EditcompanyBloc>(context)
+                          .add(SaveCompanyEvent(widget.companyId, company));
                     }
                   },
                   icon: Icon(
@@ -148,26 +150,25 @@ class _AddCompanyState extends State<AddCompany> {
           ),
         );
 
-    return BlocConsumer<AddcompanyBloc, AddcompanyState>(
-      listener: (context, state) {
-        if (state is AddcompanyLoadedState) {
-          nameController.text = "";
-          shortNameController.text = "";
-          equity = false;
-          commodity = false;
-          forex = false;
-          future = false;
-          option = false;
-
-          Toast.show('Company details added successfully', context,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Edit Company"),
+      ),
+      body: BlocConsumer<EditcompanyBloc, EditcompanyState>(
+          listener: (context, state) {
+        if (state is EditcompanyLoaded) {
+          nameController.text = state.companyName;
+          shortNameController.text = state.companyShortName;
+        } else if (state is EditcompanySaved) {
+          Toast.show('Company details and markets updated', context,
               backgroundColor: Colors.blue,
               textColor: Colors.white,
               gravity: Toast.BOTTOM,
               duration: Toast.LENGTH_SHORT);
+          Navigator.pop(context);
         }
-      },
-      builder: (context, state) {
-        if (state is AddcompanyInitial || state is AddcompanyLoadedState)
+      }, builder: (context, state) {
+        if (state is EditcompanyLoaded) {
           return Container(
             height: double.infinity,
             width: double.infinity,
@@ -175,57 +176,71 @@ class _AddCompanyState extends State<AddCompany> {
               key: _formKey,
               child: SafeArea(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 20),
+                    SizedBox(
+                      height: 20,
+                    ),
                     textField("Company name", nameController),
                     textField("Short name for company", shortNameController),
                     Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Text(
-                        "Please select the market type",
+                        "Select the market type to add",
                         textScaleFactor: 1.2,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    buildCheckBox("Equity", equity, (value) {
-                      setState(() {
-                        equity = value;
-                      });
-                    }),
-                    buildCheckBox("Futures", future, (value) {
-                      setState(() {
-                        future = value;
-                      });
-                    }),
-                    buildCheckBox("Options", option, (value) {
-                      setState(() {
-                        option = value;
-                      });
-                    }),
-                    buildCheckBox("Commodity", commodity, (value) {
-                      setState(() {
-                        commodity = value;
-                      });
-                    }),
-                    buildCheckBox("Forex", forex, (value) {
-                      setState(() {
-                        forex = value;
-                      });
-                    }),
+                    if (!widget.markets.contains("Equity"))
+                      buildCheckBox("Equity", equity, (value) {
+                        setState(() {
+                          equity = value;
+                        });
+                      }),
+                    if (!widget.markets.contains("Futures"))
+                      buildCheckBox("Futures", future, (value) {
+                        setState(() {
+                          future = value;
+                        });
+                      }),
+                    if (!widget.markets.contains("Options"))
+                      buildCheckBox("Options", option, (value) {
+                        setState(() {
+                          option = value;
+                        });
+                      }),
+                    if (!widget.markets.contains("Commodity"))
+                      buildCheckBox("Commodity", commodity, (value) {
+                        setState(() {
+                          commodity = value;
+                        });
+                      }),
+                    if (!widget.markets.contains("Forex"))
+                      buildCheckBox("Forex", forex, (value) {
+                        setState(() {
+                          forex = value;
+                        });
+                      }),
                     addButtonRow(),
                   ],
                 ),
               ),
             ),
           );
-        else if (state is AddcompanyBusyState) {
-          return Center(
-            child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(ColorValues.blue)),
+        } else if (state is EditcompanyInitial || state is EditcompanySaved) {
+          return Container(
+            alignment: Alignment.center,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(ColorValues.blue),
+                ),
+              ],
+            ),
           );
         }
-      },
+      }),
     );
   }
 }

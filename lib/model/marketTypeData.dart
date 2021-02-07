@@ -4,7 +4,7 @@ class MarketTypeData {
   String _marketTypeName;
   String _marketTypeId;
   List<dynamic> _targetList;
-  List<dynamic> _commentList;
+  List<dynamic> commentList;
   int _callType;
   String _companyID;
   double _entryRate;
@@ -40,10 +40,6 @@ class MarketTypeData {
 
   set targetList(List value) => _targetList = value;
 
-  List get commentList => _commentList;
-
-  set commentList(List value) => _commentList = value;
-
   // ignore: unnecessary_getters_setters
   int get callType => _callType;
 
@@ -58,7 +54,7 @@ class MarketTypeData {
 
   // ignore: unnecessary_getters_setters
 
-  
+  // ignore: unnecessary_getters_setters
   double get entryRate => _entryRate;
 
   // ignore: unnecessary_getters_setters
