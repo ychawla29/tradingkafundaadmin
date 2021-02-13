@@ -455,6 +455,9 @@ class _ManageScreenState extends State<ManageScreen> {
                                   setState(() {
                                     if (!checkedTarget3)
                                       checkedStopLoss = newValue;
+                                    checkedTypeBuy = false;
+                                    checkedTypeSell = false;
+                                    checkedTypeClosed = true;
                                   });
                                 },
                               )
@@ -875,6 +878,9 @@ class _ManageScreenState extends State<ManageScreen> {
                                   setState(() {
                                     if (!checkedTarget3)
                                       checkedStopLoss = newValue;
+                                    checkedTypeBuy = false;
+                                    checkedTypeSell = false;
+                                    checkedTypeClosed = true;
                                   });
                                 },
                               )

@@ -8,7 +8,7 @@ import 'package:tradingkafundaadmin/model/model.dart';
 class EditCompany extends StatefulWidget {
   EditCompany({Key key, this.companyId, this.markets}) : super(key: key);
   final String companyId;
-  final List<String> markets;
+  final List<Map<String, String>> markets;
   @override
   _EditCompanyState createState() => _EditCompanyState();
 }
@@ -22,9 +22,15 @@ class _EditCompanyState extends State<EditCompany> {
   bool option = false;
   bool commodity = false;
   bool forex = false;
-
+  List<String> markets = List();
   @override
   void initState() {
+    markets = widget.markets
+        .asMap()
+        .values
+        .toList()
+        .map((e) => e.keys.first)
+        .toList();
     BlocProvider.of<EditcompanyBloc>(context)
         .add(FetchCompanyDetailsEvent(widget.companyId));
     super.initState();
@@ -190,31 +196,31 @@ class _EditCompanyState extends State<EditCompany> {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    if (!widget.markets.contains("Equity"))
+                    if (!markets.contains("Equity"))
                       buildCheckBox("Equity", equity, (value) {
                         setState(() {
                           equity = value;
                         });
                       }),
-                    if (!widget.markets.contains("Futures"))
+                    if (!markets.contains("Futures"))
                       buildCheckBox("Futures", future, (value) {
                         setState(() {
                           future = value;
                         });
                       }),
-                    if (!widget.markets.contains("Options"))
+                    if (!markets.contains("Options"))
                       buildCheckBox("Options", option, (value) {
                         setState(() {
                           option = value;
                         });
                       }),
-                    if (!widget.markets.contains("Commodity"))
+                    if (!markets.contains("Commodity"))
                       buildCheckBox("Commodity", commodity, (value) {
                         setState(() {
                           commodity = value;
                         });
                       }),
-                    if (!widget.markets.contains("Forex"))
+                    if (!markets.contains("Forex"))
                       buildCheckBox("Forex", forex, (value) {
                         setState(() {
                           forex = value;

@@ -38,15 +38,21 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Center(
         child: Container(
-          height: 250.0,
+          height: 400.0,
           width: 300.0,
           child: Column(
             children: <Widget>[
               Form(
                 key: formKey,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      child: Container(
+                        child: Image.asset("images/tradingkafundalogo.jpg"),
+                      ),
+                    ),
                     Padding(
                         padding: EdgeInsets.only(
                             left: 25.0, right: 25.0, top: 20.0, bottom: 5.0),
@@ -85,37 +91,43 @@ class _LoginPageState extends State<LoginPage> {
                             },
                           ),
                         )),
-                    InkWell(
-                        onTap: () {
-                          if (checkFields()) {
-                            print("Email: $email Password $password");
-                            if (email == "talktotradingkafunda@gmail.com" &&
-                                password == "Hello@Market") {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => MultiBlocProvider(
-                                              providers: [
-                                                BlocProvider(
-                                                    create: (context) =>
-                                                        ManagemarketBloc()),
-                                                BlocProvider(
-                                                    create: (context) =>
-                                                        AddcompanyBloc())
-                                              ],
-                                              child: MyHomePage(
-                                                  title:
-                                                      "Trading ka Funda Admin"))));
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: SizedBox(
+                        width: 150,
+                        height: 34,
+                        child: RaisedButton(
+                          onPressed: () {
+                            if (checkFields()) {
+                              print("Email: $email Password $password");
+                              if (email == "talktotradingkafunda@gmail.com" &&
+                                  password == "Hello@Market") {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => MultiBlocProvider(
+                                                providers: [
+                                                  BlocProvider(
+                                                      create: (context) =>
+                                                          ManagemarketBloc()),
+                                                  BlocProvider(
+                                                      create: (context) =>
+                                                          AddcompanyBloc())
+                                                ],
+                                                child: MyHomePage(
+                                                    title:
+                                                        "Trading ka Funda Admin"))));
+                              }
                             }
-                          }
-                        },
-                        child: Container(
-                            height: 40.0,
-                            width: 100.0,
-                            decoration: BoxDecoration(
-                              color: Colors.green.withOpacity(0.2),
-                            ),
-                            child: Center(child: Text('Sign in'))))
+                          },
+                          color: Colors.blue,
+                          child: Text(
+                            "Login",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               )

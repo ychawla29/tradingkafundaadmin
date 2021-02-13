@@ -32,7 +32,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
-  Widget selectionWidget = ManageScreen();
+  Widget selectionWidget = AddCompany();
   String title = "Trading Ka Funda Admin / Manage Market Data";
 
   @override

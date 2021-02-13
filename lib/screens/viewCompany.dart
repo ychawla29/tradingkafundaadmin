@@ -2,11 +2,12 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tradingkafundaadmin/bloc/bloc/deletecompany_bloc.dart';
 import 'package:tradingkafundaadmin/bloc/bloc/editcompany_bloc.dart';
 import 'package:tradingkafundaadmin/color/colors.dart';
+import 'package:tradingkafundaadmin/screens/deleteCompany.dart';
 import 'package:tradingkafundaadmin/screens/editCompany.dart';
 
 List<Color> colorList = [
@@ -27,15 +28,16 @@ class ViewCompany extends StatelessWidget {
     return colorList[index];
   }
 
-  Future<List<String>> getDetails(String companyId) async {
-    List<String> markets = List();
+  Future<List<Map<String, String>>> getDetails(String companyId) async {
+    List<Map<String, String>> markets = List();
     var firestore = FirebaseFirestore.instance;
     var marketData = await firestore.collection("marketType").get();
     for (var doc in marketData.docs) {
       var snapData =
           await firestore.collection("marketType/${doc.id}/data").get();
       for (var snapDoc in snapData.docs) {
-        if (snapDoc["companyID"] == companyId) markets.add(doc["name"]);
+        if (snapDoc["companyID"] == companyId)
+          markets.add({doc["name"]: snapDoc.id});
       }
     }
     return markets;
@@ -72,7 +74,7 @@ class ViewCompany extends StatelessWidget {
                             onTap: () {},
                             subtitle: Container(
                               height: 30,
-                              child: FutureBuilder<List<String>>(
+                              child: FutureBuilder<List<Map<String, String>>>(
                                 future: getDetails(dataSnapshots[index].id),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData)
@@ -82,7 +84,7 @@ class ViewCompany extends StatelessWidget {
                                       children: [
                                         Expanded(
                                             child: Text(
-                                                "Markets : ${snapshot.data.join(", ")}")),
+                                                "Markets : ${snapshot.data.asMap().values.toList().map((e) => e.keys.first).toList().join(", ")}")),
                                         FlatButton(
                                             onPressed: () {
                                               Navigator.push(
@@ -104,41 +106,26 @@ class ViewCompany extends StatelessWidget {
                                             child: Text("Edit")),
                                         Text(" | "),
                                         FlatButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (_) =>
+                                                          BlocProvider(
+                                                              create: (context) =>
+                                                                  DeletecompanyBloc(),
+                                                              child:
+                                                                  DeleteCompany(
+                                                                companyId:
+                                                                    dataSnapshots[
+                                                                            index]
+                                                                        .id,
+                                                                markets:
+                                                                    snapshot
+                                                                        .data,
+                                                              ))));
+                                            },
                                             child: Text("Delete"))
-                                        // RichText(
-                                        //   text: TextSpan(children: [
-                                        //     TextSpan(
-                                        //         text: "Edit ",
-                                        //         recognizer:
-                                        //             TapGestureRecognizer()
-                                        //               ..onTap = () {
-                                        //                 Navigator.push(
-                                        //                     context,
-                                        //                     MaterialPageRoute(
-                                        //                       builder: (_) =>
-                                        //                           BlocProvider(
-                                        //                         create: (context) =>
-                                        //                             EditcompanyBloc(),
-                                        //                         child:
-                                        //                             EditCompany(
-                                        //                           companyId:
-                                        //                               dataSnapshots[
-                                        //                                       index]
-                                        //                                   .id,
-                                        //                           markets:
-                                        //                               snapshot
-                                        //                                   .data,
-                                        //                         ),
-                                        //                       ),
-                                        //                     ));
-                                        //               }),
-                                        //     TextSpan(text: " | "),
-                                        //     TextSpan(
-                                        //       text: " Delete",
-                                        //     ),
-                                        //   ]),
-                                        // ),
                                       ],
                                     );
                                   else
