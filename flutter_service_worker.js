@@ -3,17 +3,18 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "assets/AssetManifest.json": "2efbb41d7877d10aac9d091f58ccd7b9",
+  "assets/AssetManifest.json": "e9a25bc2e890edb790bf682231c28a6d",
 "assets/FontManifest.json": "dc3d03800ccca4601324923c0b1d6d57",
 "assets/fonts/MaterialIcons-Regular.otf": "1288c9e28052e028aba623321f7826ac",
+"assets/images/tradingkafundalogo.jpg": "121ec712db2279a1ae07555bbbb56c22",
 "assets/NOTICES": "304f6410de308b886e6d51e5f895450a",
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "b14fcf3ee94e3ace300b192e9e7c8c5d",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
-"index.html": "ddd2e0b05a2d9e1cd7b5c000502a4187",
-"/": "ddd2e0b05a2d9e1cd7b5c000502a4187",
-"main.dart.js": "46bb66501e5036e66ee330c1f483a336",
+"index.html": "331b46a8da6b579da9f3a8c13cb1b705",
+"/": "331b46a8da6b579da9f3a8c13cb1b705",
+"main.dart.js": "c287ddce9e13d90246550d4a06bbcc9f",
 "manifest.json": "89da6edc9a9b270b5938a7beaeaecf73",
 "version.json": "7b171daeb99a61922784784988424556"
 };
