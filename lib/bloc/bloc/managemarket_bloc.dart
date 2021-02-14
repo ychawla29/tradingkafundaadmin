@@ -141,10 +141,14 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
             commentList.add(Comment("All Targets Achieved, Call Closed",
                     DateTime.now().toString())
                 .toMap());
+            var companyDetails = await firestore
+                .doc("companyMaster/${event.updatedData.companyID}")
+                .get();
+            var companyName = companyDetails.data()["name"];
             var time = DateTime.now().toString();
             firestore.collection("notification").add({
               "title": "TradingKaFunda",
-              "body": "All Targets Achieved, Call Closed",
+              "body": "$companyName - All Targets Achieved, Call Closed",
               "time": time.substring(
                 0,
                 time.lastIndexOf("."),
@@ -156,10 +160,14 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
             commentList.add(
                 Comment("Target 1 and 2 Achieved", DateTime.now().toString())
                     .toMap());
+            var companyDetails = await firestore
+                .doc("companyMaster/${event.updatedData.companyID}")
+                .get();
+            var companyName = companyDetails.data()["name"];
             var time = DateTime.now().toString();
             firestore.collection("notification").add({
               "title": "TradingKaFunda",
-              "body": "Target 1 and 2 Achieved",
+              "body": "$companyName - Target 1 and 2 Achieved",
               "time": time.substring(
                 0,
                 time.lastIndexOf("."),
@@ -170,10 +178,14 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         } else {
           commentList.add(
               Comment("Target 1 Achieved", DateTime.now().toString()).toMap());
+          var companyDetails = await firestore
+              .doc("companyMaster/${event.updatedData.companyID}")
+              .get();
+          var companyName = companyDetails.data()["name"];
           var time = DateTime.now().toString();
           firestore.collection("notification").add({
             "title": "TradingKaFunda",
-            "body": "Target 1 Achieved",
+            "body": "$companyName - Target 1 Achieved",
             "time": time.substring(
               0,
               time.lastIndexOf("."),
@@ -186,10 +198,14 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         commentList.add(
             Comment("Stop Loss hit, Call Closed", DateTime.now().toString())
                 .toMap());
+        var companyDetails = await firestore
+            .doc("companyMaster/${event.updatedData.companyID}")
+            .get();
+        var companyName = companyDetails.data()["name"];
         var time = DateTime.now().toString();
         firestore.collection("notification").add({
           "title": "TradingKaFunda",
-          "body": "Stop Loss hit, Call Closed",
+          "body": "$companyName - Stop Loss hit, Call Closed",
           "time": time.substring(
             0,
             time.lastIndexOf("."),
@@ -239,10 +255,14 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
               "comment": "All Targets Achieved, Call Closed",
               "time": DateTime.now().toString()
             });
+            var companyDetails = await firestore
+                .doc("companyMaster/${event.updatedData.companyID}")
+                .get();
+            var companyName = companyDetails.data()["name"];
             var time = DateTime.now().toString();
             firestore.collection("notification").add({
               "title": "TradingKaFunda",
-              "body": "All Targets Achieved, Call Closed",
+              "body": "$companyName - All Targets Achieved, Call Closed",
               "time": time.substring(
                 0,
                 time.lastIndexOf("."),
@@ -258,9 +278,13 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
           });
 
           var time = DateTime.now().toString();
+          var companyDetails = await firestore
+              .doc("companyMaster/${event.updatedData.companyID}")
+              .get();
+          var companyName = companyDetails.data()["name"];
           firestore.collection("notification").add({
             "title": "TradingKaFunda",
-            "body": "Target 2 Achieved",
+            "body": "$companyName - Target 2 Achieved",
             "time": time.substring(
               0,
               time.lastIndexOf("."),
@@ -276,10 +300,14 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
                 "comment": "All Targets Achieved, Call Closed",
                 "time": DateTime.now().toString()
               });
+              var companyDetails = await firestore
+                  .doc("companyMaster/${event.updatedData.companyID}")
+                  .get();
+              var companyName = companyDetails.data()["name"];
               var time = DateTime.now().toString();
               firestore.collection("notification").add({
                 "title": "TradingKaFunda",
-                "body": "All Targets Achieved, Call Closed",
+                "body": "$companyName - All Targets Achieved, Call Closed",
                 "time": time.substring(
                   0,
                   time.lastIndexOf("."),
@@ -292,10 +320,14 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
                 "comment": "Target 1 and 2 Achieved",
                 "time": DateTime.now().toString()
               });
+              var companyDetails = await firestore
+                  .doc("companyMaster/${event.updatedData.companyID}")
+                  .get();
+              var companyName = companyDetails.data()["name"];
               var time = DateTime.now().toString();
               firestore.collection("notification").add({
                 "title": "TradingKaFunda",
-                "body": "Target 1 and 2 Achieved",
+                "body": "$companyName - Target 1 and 2 Achieved",
                 "time": time.substring(
                   0,
                   time.lastIndexOf("."),
@@ -309,9 +341,13 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
               "comment": "Target 1 Achieved",
               "time": DateTime.now().toString()
             });
+            var companyDetails = await firestore
+                .doc("companyMaster/${event.updatedData.companyID}")
+                .get();
+            var companyName = companyDetails.data()["name"];
             firestore.collection("notification").add({
               "title": "TradingKaFunda",
-              "body": "Target 1 Achieved",
+              "body": "$companyName - Target 1 Achieved",
               "time": time.substring(
                 0,
                 time.lastIndexOf("."),
@@ -327,10 +363,14 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         commentList.add(
             Comment("Stop Loss Hit, Call Closed", DateTime.now().toString())
                 .toMap());
+        var companyDetails = await firestore
+            .doc("companyMaster/${event.updatedData.companyID}")
+            .get();
+        var companyName = companyDetails.data()["name"];
         var time = DateTime.now().toString();
         firestore.collection("notification").add({
           "title": "TradingKaFunda",
-          "body": "Stop Loss Hit, Call Closed",
+          "body": "$companyName -  Loss Hit, Call Closed",
           "time": time.substring(
             0,
             time.lastIndexOf("."),
