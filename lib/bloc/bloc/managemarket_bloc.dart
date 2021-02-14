@@ -141,21 +141,61 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
             commentList.add(Comment("All Targets Achieved, Call Closed",
                     DateTime.now().toString())
                 .toMap());
+            var time = DateTime.now().toString();
+            firestore.collection("notification").add({
+              "title": "TradingKaFunda",
+              "body": "All Targets Achieved, Call Closed",
+              "time": time.substring(
+                0,
+                time.lastIndexOf("."),
+              ),
+              "companyID": event.updatedData.companyID
+            });
             event.updatedData.callType = 2;
           } else {
             commentList.add(
                 Comment("Target 1 and 2 Achieved", DateTime.now().toString())
                     .toMap());
+            var time = DateTime.now().toString();
+            firestore.collection("notification").add({
+              "title": "TradingKaFunda",
+              "body": "Target 1 and 2 Achieved",
+              "time": time.substring(
+                0,
+                time.lastIndexOf("."),
+              ),
+              "companyID": event.updatedData.companyID
+            });
           }
         } else {
           commentList.add(
               Comment("Target 1 Achieved", DateTime.now().toString()).toMap());
+          var time = DateTime.now().toString();
+          firestore.collection("notification").add({
+            "title": "TradingKaFunda",
+            "body": "Target 1 Achieved",
+            "time": time.substring(
+              0,
+              time.lastIndexOf("."),
+            ),
+            "companyID": event.updatedData.companyID
+          });
         }
       } else if (event.updatedData.targetList[3]["isAchived"] != null &&
           event.updatedData.targetList[3]["isAchived"]) {
         commentList.add(
             Comment("Stop Loss hit, Call Closed", DateTime.now().toString())
                 .toMap());
+        var time = DateTime.now().toString();
+        firestore.collection("notification").add({
+          "title": "TradingKaFunda",
+          "body": "Stop Loss hit, Call Closed",
+          "time": time.substring(
+            0,
+            time.lastIndexOf("."),
+          ),
+          "companyID": event.updatedData.companyID
+        });
         event.updatedData.callType = 2;
       }
       var reference = await firestore
@@ -199,12 +239,33 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
               "comment": "All Targets Achieved, Call Closed",
               "time": DateTime.now().toString()
             });
+            var time = DateTime.now().toString();
+            firestore.collection("notification").add({
+              "title": "TradingKaFunda",
+              "body": "All Targets Achieved, Call Closed",
+              "time": time.substring(
+                0,
+                time.lastIndexOf("."),
+              ),
+              "companyID": event.updatedData.companyID
+            });
             event.updatedData.callType = 2;
           }
         } else {
           commentList.add({
             "comment": "Target 2 Achieved",
             "time": DateTime.now().toString()
+          });
+
+          var time = DateTime.now().toString();
+          firestore.collection("notification").add({
+            "title": "TradingKaFunda",
+            "body": "Target 2 Achieved",
+            "time": time.substring(
+              0,
+              time.lastIndexOf("."),
+            ),
+            "companyID": event.updatedData.companyID
           });
         }
       } else {
@@ -215,17 +276,47 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
                 "comment": "All Targets Achieved, Call Closed",
                 "time": DateTime.now().toString()
               });
+              var time = DateTime.now().toString();
+              firestore.collection("notification").add({
+                "title": "TradingKaFunda",
+                "body": "All Targets Achieved, Call Closed",
+                "time": time.substring(
+                  0,
+                  time.lastIndexOf("."),
+                ),
+                "companyID": event.updatedData.companyID
+              });
               event.updatedData.callType = 2;
             } else {
               commentList.add({
                 "comment": "Target 1 and 2 Achieved",
                 "time": DateTime.now().toString()
               });
+              var time = DateTime.now().toString();
+              firestore.collection("notification").add({
+                "title": "TradingKaFunda",
+                "body": "Target 1 and 2 Achieved",
+                "time": time.substring(
+                  0,
+                  time.lastIndexOf("."),
+                ),
+                "companyID": event.updatedData.companyID
+              });
             }
           } else {
+            var time = DateTime.now().toString();
             commentList.add({
               "comment": "Target 1 Achieved",
               "time": DateTime.now().toString()
+            });
+            firestore.collection("notification").add({
+              "title": "TradingKaFunda",
+              "body": "Target 1 Achieved",
+              "time": time.substring(
+                0,
+                time.lastIndexOf("."),
+              ),
+              "companyID": event.updatedData.companyID
             });
           }
         } else {
@@ -236,6 +327,16 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         commentList.add(
             Comment("Stop Loss Hit, Call Closed", DateTime.now().toString())
                 .toMap());
+        var time = DateTime.now().toString();
+        firestore.collection("notification").add({
+          "title": "TradingKaFunda",
+          "body": "Stop Loss Hit, Call Closed",
+          "time": time.substring(
+            0,
+            time.lastIndexOf("."),
+          ),
+          "companyID": event.updatedData.companyID
+        });
         event.updatedData.callType = 2;
       }
       var reference = await firestore

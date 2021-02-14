@@ -186,7 +186,7 @@ class _DeleteCompanyState extends State<DeleteCompany> {
                             onPressed: () {
                               AlertDialog alertDialog = AlertDialog(
                                 title: Text(
-                                    "Delete ${state.companyName} from folowing markets"),
+                                    "Delete ${state.companyName} from following markets"),
                                 content: Text(discardMarkets.join(", ")),
                                 actions: [
                                   FlatButton(
