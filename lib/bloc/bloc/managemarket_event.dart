@@ -13,7 +13,7 @@ class ChangeSelectedIndex extends ManagemarketEvent {
 
 class SetSelectedData extends ManagemarketEvent {
   final MarketTypeData marketTypeData;
-
+  
   SetSelectedData(this.marketTypeData);
 }
 

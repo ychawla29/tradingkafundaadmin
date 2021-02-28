@@ -7,6 +7,12 @@ class MarketTypeData {
   List<dynamic> commentList;
   int _callType;
   String _companyID;
+  String _companyName;
+
+  get companyName => this._companyName;
+
+  set companyName(value) => this._companyName = value;
+
   double _entryRate;
   DateTime _updatedOn;
   bool _isNew;

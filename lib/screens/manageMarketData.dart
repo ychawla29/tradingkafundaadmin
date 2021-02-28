@@ -145,6 +145,15 @@ class _ManageScreenState extends State<ManageScreen> {
         child: BlocConsumer<ManagemarketBloc, ManagemarketState>(
       listener: (context, state) {
         if (state is ManagemarketLoaded) {
+          if (state.selectedIndex != null) {
+            dropdownValue = state.marketDataList[state.selectedIndex];
+          }
+          if (state.selectedData != null) {
+            dropdownValue1 = state
+                .companyList[state.companyList.indexWhere(
+                    (element) => element.docId == state.selectedData.docId)]
+                .companyName;
+          }
           if (state.message != null) {
             dropdownValue = null;
             dropdownValue1 = null;
@@ -222,7 +231,7 @@ class _ManageScreenState extends State<ManageScreen> {
                   Row(
                     children: [
                       Text(
-                        "Please select company name: ",
+                        "Please select market type: ",
                         textScaleFactor: 1.2,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
@@ -233,29 +242,29 @@ class _ManageScreenState extends State<ManageScreen> {
                         items: state.marketDataList
                             .map<DropdownMenuItem<String>>((value) {
                           return DropdownMenuItem<String>(
-                            value: value.keys.first,
-                            child: Text(value.keys.first),
+                            value: value,
+                            child: Text(value),
                           );
                         }).toList(),
-                        hint: Text("Select Company"),
+                        hint: Text("Select Market"),
                         onChanged: (newValue) {
                           BlocProvider.of<ManagemarketBloc>(context).add(
                               ChangeSelectedIndex(state.marketDataList
-                                  .indexWhere((element) =>
-                                      element.keys.first == newValue)));
+                                  .indexWhere(
+                                      (element) => element == newValue)));
                           setState(() {
-                            dropdownValue1 = newValue;
-                            dropdownValue = null;
+                            dropdownValue = newValue;
+                            dropdownValue1 = null;
                           });
                         },
-                        value: dropdownValue1,
+                        value: dropdownValue,
                       )
                     ],
                   ),
                   Row(
                     children: [
                       Text(
-                        "Please select the market type: ",
+                        "Please select company name: ",
                         textScaleFactor: 1.2,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
@@ -263,31 +272,27 @@ class _ManageScreenState extends State<ManageScreen> {
                         width: 10,
                       ),
                       DropdownButton(
-                        items: state
-                            .marketDataList[state.selectedIndex].values.first
+                        items: state.companyList
                             .map<DropdownMenuItem<String>>((value) {
                           return DropdownMenuItem<String>(
-                            value: value.marketTypeName,
-                            child: Text(value.marketTypeName),
+                            value: value.companyName,
+                            child: Text(value.companyName),
                           );
                         }).toList(),
-                        hint: Text("Select Market Type"),
+                        hint: Text("Select Comapany Name"),
                         onChanged: (newValue) {
                           MarketTypeData marketTypeData;
-                          for (var marketType in state
-                              .marketDataList[state.selectedIndex].values) {
-                            for (var market in marketType) {
-                              if (market.marketTypeName == newValue)
-                                marketTypeData = market;
-                            }
-                          }
-                          BlocProvider.of<ManagemarketBloc>(context)
-                              .add(SetSelectedData(marketTypeData));
+                          BlocProvider.of<ManagemarketBloc>(context).add(
+                              SetSelectedData(state.companyList
+                                  .where((element) =>
+                                      element.companyName == newValue)
+                                  .toList()
+                                  .first));
                           setState(() {
-                            dropdownValue = newValue;
+                            dropdownValue1 = newValue;
                           });
                         },
-                        value: dropdownValue,
+                        value: dropdownValue1,
                       )
                     ],
                   ),
@@ -645,7 +650,7 @@ class _ManageScreenState extends State<ManageScreen> {
                   Row(
                     children: [
                       Text(
-                        "Please select company name: ",
+                        "Please select market type: ",
                         textScaleFactor: 1.2,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
@@ -656,29 +661,29 @@ class _ManageScreenState extends State<ManageScreen> {
                         items: state.marketDataList
                             .map<DropdownMenuItem<String>>((value) {
                           return DropdownMenuItem<String>(
-                            value: value.keys.first,
-                            child: Text(value.keys.first),
+                            value: value,
+                            child: Text(value),
                           );
                         }).toList(),
-                        hint: Text("Select Company"),
+                        hint: Text("Select Market"),
                         onChanged: (newValue) {
                           BlocProvider.of<ManagemarketBloc>(context).add(
                               ChangeSelectedIndex(state.marketDataList
-                                  .indexWhere((element) =>
-                                      element.keys.first == newValue)));
+                                  .indexWhere(
+                                      (element) => element == newValue)));
                           setState(() {
-                            dropdownValue1 = newValue;
-                            dropdownValue = null;
+                            dropdownValue = newValue;
+                            dropdownValue1 = null;
                           });
                         },
-                        value: dropdownValue1,
+                        value: dropdownValue,
                       )
                     ],
                   ),
                   Row(
                     children: [
                       Text(
-                        "Please select the market type: ",
+                        "Please select company name: ",
                         textScaleFactor: 1.2,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
@@ -686,31 +691,27 @@ class _ManageScreenState extends State<ManageScreen> {
                         width: 10,
                       ),
                       DropdownButton(
-                        items: state
-                            .marketDataList[state.selectedIndex].values.first
+                        items: state.companyList
                             .map<DropdownMenuItem<String>>((value) {
                           return DropdownMenuItem<String>(
-                            value: value.marketTypeName,
-                            child: Text(value.marketTypeName),
+                            value: value.companyName,
+                            child: Text(value.companyName),
                           );
                         }).toList(),
-                        hint: Text("Select Market Type"),
+                        hint: Text("Select Comapany Name"),
                         onChanged: (newValue) {
                           MarketTypeData marketTypeData;
-                          for (var marketType in state
-                              .marketDataList[state.selectedIndex].values) {
-                            for (var market in marketType) {
-                              if (market.marketTypeName == newValue)
-                                marketTypeData = market;
-                            }
-                          }
-                          BlocProvider.of<ManagemarketBloc>(context)
-                              .add(SetSelectedData(marketTypeData));
+                          BlocProvider.of<ManagemarketBloc>(context).add(
+                              SetSelectedData(state.companyList
+                                  .where((element) =>
+                                      element.companyName == newValue)
+                                  .toList()
+                                  .first));
                           setState(() {
-                            dropdownValue = newValue;
+                            dropdownValue1 = newValue;
                           });
                         },
-                        value: dropdownValue,
+                        value: dropdownValue1,
                       )
                     ],
                   ),

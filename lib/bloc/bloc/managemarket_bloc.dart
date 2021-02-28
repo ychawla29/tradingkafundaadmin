@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:tradingkafundaadmin/constants/marketConstants.dart';
 import 'package:tradingkafundaadmin/model/model.dart';
 
 part 'managemarket_event.dart';
@@ -13,7 +14,8 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
   ManagemarketBloc() : super(ManagemarketInitial());
 
   var firestore = FirebaseFirestore.instance;
-  List<Map<String, List<MarketTypeData>>> marketDataList = List();
+  List<String> marketDataList = List();
+  List<MarketTypeData> companyList = List();
   MarketTypeData selectedData;
   int selectedIndex;
 
@@ -45,87 +47,82 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
 
   Stream<ManagemarketState> refreshMarketData(RefreshMarketData event) async* {
     yield ManagemarketLoaded(marketDataList, selectedIndex,
-        selectedData: event.updatedData);
+        selectedData: event.updatedData, companyList: companyList);
   }
 
   Stream<ManagemarketState> resetMarketData(ResetMarketData event) async* {
     yield ManagemarketInitial();
     selectedData.callType = 0;
-    selectedData.targetList[0]["value"] = "";
-    selectedData.targetList[0]["isAchieved"] = false;
+    if (selectedData.targetList != null) {
+      selectedData.targetList[0]["value"] = "";
+      selectedData.targetList[0]["isAchieved"] = false;
 
-    selectedData.targetList[1]["value"] = "";
-    selectedData.targetList[1]["isAchieved"] = false;
+      selectedData.targetList[1]["value"] = "";
+      selectedData.targetList[1]["isAchieved"] = false;
 
-    selectedData.targetList[2]["value"] = "";
-    selectedData.targetList[2]["isAchieved"] = false;
+      selectedData.targetList[2]["value"] = "";
+      selectedData.targetList[2]["isAchieved"] = false;
 
-    selectedData.targetList[3]["value"] = "";
-    selectedData.targetList[3]["isAchieved"] = false;
-
+      selectedData.targetList[3]["value"] = "";
+      selectedData.targetList[3]["isAchieved"] = false;
+    }
     selectedData.commentList = List();
 
     selectedData.entryRate = 0;
     yield ManagemarketResetState(
         marketDataList: marketDataList,
         selectedData: selectedData,
-        selectedIndex: selectedIndex);
+        selectedIndex: selectedIndex,
+        companyList: companyList);
   }
 
   Stream<ManagemarketState> fetchMarketData(FetchMarketData event) async* {
     yield ManagemarketInitial();
     marketDataList.clear();
-    var companyCollection = await firestore.collection("companyMaster").get();
+    companyList.clear();
     var marketCollection = await firestore.collection("marketType").get();
-    for (var company in companyCollection.docs) {
-      List<MarketTypeData> listMarketData = List();
-      for (var marketData in marketCollection.docs) {
-        var docCollection = await firestore
-            .collection("marketType/${marketData.id}/data")
-            .get();
-        for (var doc in docCollection.docs) {
-          if (doc["companyID"] == company.id) {
-            if (doc["isNew"] == false) {
-              MarketTypeData marketTypeData = MarketTypeData();
-              marketTypeData.companyID = company.id;
-              marketTypeData.marketTypeName = marketData["name"];
-              marketTypeData.callType = doc["callType"];
-              marketTypeData.commentList = doc["commentList"];
-              marketTypeData.entryRate = doc["entryRate"];
-              marketTypeData.marketTypeId = marketData.id;
-              marketTypeData.docId = doc.id;
-              marketTypeData.targetList = doc["targetList"];
-              marketTypeData.isNew = doc["isNew"];
-              listMarketData.add(marketTypeData);
-            } else {
-              MarketTypeData marketTypeData = MarketTypeData();
-              marketTypeData.companyID = company.id;
-              marketTypeData.marketTypeName = marketData["name"];
-              marketTypeData.marketTypeId = marketData.id;
-              marketTypeData.docId = doc.id;
-              marketTypeData.isNew = doc["isNew"];
-              listMarketData.add(marketTypeData);
-            }
-          }
-        }
-      }
-      marketDataList.add({company["name"]: listMarketData});
+    for (QueryDocumentSnapshot marketData in marketCollection.docs) {
+      marketDataList.add(marketData["name"]);
     }
-    yield ManagemarketLoaded(marketDataList, 0);
+    yield ManagemarketLoaded(marketDataList, null, companyList: companyList);
   }
 
   Stream<ManagemarketState> changeSelectedIndex(
       ChangeSelectedIndex event) async* {
     yield ManagemarketInitial();
     selectedIndex = event.selectedIndex;
-    yield ManagemarketLoaded(marketDataList, event.selectedIndex);
+    companyList.clear();
+    print("marketType : ${marketDataList[selectedIndex]}");
+    String marketId = getMarketTypeId(marketDataList[selectedIndex]);
+    print("ID: marketType/$marketId/data");
+    var companyCollection =
+        await firestore.collection("marketType/$marketId/data").get();
+    for (QueryDocumentSnapshot companyData in companyCollection.docs) {
+      MarketTypeData company = MarketTypeData();
+      company.companyID = companyData["companyID"];
+      company.isNew = companyData["isNew"];
+      company.marketTypeId = marketId;
+      company.docId = companyData.id;
+      company.companyName = await getCompanyDetails(company.companyID);
+      if (!company.isNew) {
+        company.marketTypeName = marketDataList[selectedIndex];
+        company.callType = companyData["callType"];
+        company.commentList = companyData["commentList"];
+        company.entryRate = companyData["entryRate"];
+        company.targetList = companyData["targetList"];
+        company.updatedOn = DateTime.parse(companyData["updatedOn"]);
+      }
+      if (company.companyName != '') companyList.add(company);
+    }
+    yield ManagemarketLoaded(marketDataList, event.selectedIndex,
+        companyList: companyList);
   }
 
   Stream<ManagemarketState> setSelectedData(SetSelectedData event) async* {
     yield ManagemarketInitial();
     selectedData = event.marketTypeData;
     yield ManagemarketLoaded(marketDataList, selectedIndex,
-        selectedData: event.marketTypeData);
+        selectedData: event.marketTypeData, companyList: companyList);
   }
 
   Stream<ManagemarketState> updateManageData(UpdateManageData event) async* {
@@ -219,29 +216,13 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
               "marketType/${event.updatedData.marketTypeId}/data/${event.updatedData.docId}")
           .update({
         "isNew": false,
+        "updatedOn": DateTime.now().toString(),
         "callType": event.updatedData.callType,
         "commentList": commentList,
         "entryRate": event.updatedData.entryRate,
         "targetList": event.updatedData.targetList,
-        "updatedOn": DateTime.now().toString(),
       });
       event.updatedData.commentList = commentList;
-      for (int i = 0;
-          i < marketDataList[selectedIndex].values.toList().length;
-          i++) {
-        for (int j = 0;
-            j < marketDataList[selectedIndex].values.toList()[i].length;
-            j++) {
-          if (marketDataList[selectedIndex]
-                  .values
-                  .toList()[i][j]
-                  .marketTypeName ==
-              event.marketTypeName) {
-            marketDataList[selectedIndex].values.toList()[i][j] =
-                event.updatedData;
-          }
-        }
-      }
     } else {
       List<dynamic> commentList = selectedData.commentList;
       print("CommentList: ${selectedData.commentList}");
@@ -387,26 +368,33 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         "commentList": commentList,
         "entryRate": event.updatedData.entryRate,
         "targetList": event.updatedData.targetList,
-        "updatedOn": DateTime.now().toString(),
       });
-      event.updatedData.commentList = commentList;
-      for (int i = 0;
-          i < marketDataList[selectedIndex].values.toList().length;
-          i++) {
-        for (int j = 0;
-            j < marketDataList[selectedIndex].values.toList()[i].length;
-            j++) {
-          if (marketDataList[selectedIndex]
-                  .values
-                  .toList()[i][j]
-                  .marketTypeName ==
-              event.marketTypeName) {
-            marketDataList[selectedIndex].values.toList()[i][j] =
-                event.updatedData;
-          }
-        }
-      }
     }
-    yield ManagemarketLoaded(marketDataList, 0, message: "List Updated");
+    yield ManagemarketLoaded(marketDataList, 0,
+        message: "List Updated", companyList: companyList);
+  }
+
+  String getMarketTypeId(String marketName) {
+    if (marketName == "Equity")
+      return MarketConstants.EQUITY;
+    else if (marketName == "Commodity")
+      return MarketConstants.COMMODITY;
+    else if (marketName == "Forex")
+      return MarketConstants.FOREX;
+    else if (marketName == "Options")
+      return MarketConstants.OPTIONS;
+    else
+      return MarketConstants.FUTURES;
+  }
+
+  Future<String> getCompanyDetails(String companyID) async {
+    print("companyMaster/$companyID");
+    try {
+      var companyData = await firestore.doc("companyMaster/$companyID").get();
+      String name = companyData["name"];
+      return name;
+    } catch (e) {
+      return '';
+    }
   }
 }
