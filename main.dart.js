@@ -66271,10 +66271,10 @@ case 2:return P.Z(o,1,r)}})
 var s=0,r=P.e7($async$o1,t.Px),q,p=2,o,n=[],m=this,l
 return P.e8(r)},
 dX:function(a){return this.abB(a)},
-abB:function(a){var $async$dX=P.T(function(b,c){switch(b){case 2:n=q
+abB:function(a){var $async$dX=P.T(function(b,a0){switch(b){case 2:n=q
 s=n.pop()
 break
-case 1:o=c
+case 1:o=a0
 s=p}while(true)switch(s){case 0:s=3
 q=[1]
 return P.Z(P.cT(new K.jN()),$async$dX,r)
@@ -66297,7 +66297,7 @@ case 13:j.push(new R.mN("All Targets Achieved, Call Closed",new P.bb(Date.now(),
 g="companyMaster/"+H.b(l.f)
 s=16
 return P.Z(O.du(h,h.ga3().cA(0,g)).c_(0),$async$dX,r)
-case 16:f=c
+case 16:f=a0
 e=O.h2(f.ga3().ee(0),f.gbS()).h(0,"name")
 d=new P.bb(Date.now(),!1).j(0)
 O.dt(h,h.ga3().cz(0,"notification")).B(0,P.V(["title","TradingKaFunda","body",H.b(e)+" - All Targets Achieved, Call Closed","time",C.c.a5(d,0,C.c.hh(d,".")),"companyID",l.f],k,i))
@@ -66308,7 +66308,7 @@ case 15:j.push(new R.mN("Target 1 and 2 Achieved",new P.bb(Date.now(),!1).j(0)).
 g="companyMaster/"+H.b(l.f)
 s=17
 return P.Z(O.du(h,h.ga3().cA(0,g)).c_(0),$async$dX,r)
-case 17:f=c
+case 17:f=a0
 e=O.h2(f.ga3().ee(0),f.gbS()).h(0,"name")
 d=new P.bb(Date.now(),!1).j(0)
 O.dt(h,h.ga3().cz(0,"notification")).B(0,P.V(["title","TradingKaFunda","body",H.b(e)+" - Target 1 and 2 Achieved","time",C.c.a5(d,0,C.c.hh(d,".")),"companyID",l.f],k,i))
@@ -66319,7 +66319,7 @@ k=m.z
 i="companyMaster/"+H.b(l.f)
 s=18
 return P.Z(O.du(k,k.ga3().cA(0,i)).c_(0),$async$dX,r)
-case 18:f=c
+case 18:f=a0
 e=O.h2(f.ga3().ee(0),f.gbS()).h(0,"name")
 d=new P.bb(Date.now(),!1).j(0)
 O.dt(k,k.ga3().cz(0,"notification")).B(0,P.V(["title","TradingKaFunda","body",H.b(e)+" - Target 1 Achieved","time",C.c.a5(d,0,C.c.hh(d,".")),"companyID",l.f],t.X,t.z))
@@ -66332,7 +66332,7 @@ k=m.z
 i="companyMaster/"+H.b(l.f)
 s=21
 return P.Z(O.du(k,k.ga3().cA(0,i)).c_(0),$async$dX,r)
-case 21:f=c
+case 21:f=a0
 e=O.h2(f.ga3().ee(0),f.gbS()).h(0,"name")
 d=new P.bb(Date.now(),!1).j(0)
 O.dt(k,k.ga3().cz(0,"notification")).B(0,P.V(["title","TradingKaFunda","body",H.b(e)+" - Stop Loss hit, Call Closed","time",C.c.a5(d,0,C.c.hh(d,".")),"companyID",l.f],t.X,t.z))
@@ -66359,7 +66359,7 @@ i=m.z
 h="companyMaster/"+H.b(l.f)
 s=31
 return P.Z(O.du(i,i.ga3().cA(0,h)).c_(0),$async$dX,r)
-case 31:f=c
+case 31:f=a0
 e=O.h2(f.ga3().ee(0),f.gbS()).h(0,"name")
 d=new P.bb(Date.now(),!1).j(0)
 O.dt(i,i.ga3().cz(0,"notification")).B(0,P.V(["title","TradingKaFunda","body",H.b(e)+" - All Targets Achieved, Call Closed","time",C.c.a5(d,0,C.c.hh(d,".")),"companyID",l.f],k,t.z))
@@ -66373,7 +66373,7 @@ i=m.z
 h="companyMaster/"+H.b(l.f)
 s=32
 return P.Z(O.du(i,i.ga3().cA(0,h)).c_(0),$async$dX,r)
-case 32:f=c
+case 32:f=a0
 e=O.h2(f.ga3().ee(0),f.gbS()).h(0,"name")
 O.dt(i,i.ga3().cz(0,"notification")).B(0,P.V(["title","TradingKaFunda","body",H.b(e)+" - Target 2 Achieved","time",C.c.a5(d,0,C.c.hh(d,".")),"companyID",l.f],k,t.z))
 case 27:s=24
@@ -66392,7 +66392,7 @@ case 39:i.B(j,P.V(["comment","All Targets Achieved, Call Closed","time",new P.bb
 i="companyMaster/"+H.b(l.f)
 s=42
 return P.Z(O.du(g,g.ga3().cA(0,i)).c_(0),$async$dX,r)
-case 42:f=c
+case 42:f=a0
 e=O.h2(f.ga3().ee(0),f.gbS()).h(0,"name")
 d=new P.bb(Date.now(),!1).j(0)
 O.dt(g,g.ga3().cz(0,"notification")).B(0,P.V(["title","TradingKaFunda","body",H.b(e)+" - All Targets Achieved, Call Closed","time",C.c.a5(d,0,C.c.hh(d,".")),"companyID",l.f],k,h))
@@ -66403,7 +66403,7 @@ case 41:i.B(j,P.V(["comment","Target 1 and 2 Achieved","time",new P.bb(Date.now(
 i="companyMaster/"+H.b(l.f)
 s=43
 return P.Z(O.du(g,g.ga3().cA(0,i)).c_(0),$async$dX,r)
-case 43:f=c
+case 43:f=a0
 e=O.h2(f.ga3().ee(0),f.gbS()).h(0,"name")
 d=new P.bb(Date.now(),!1).j(0)
 O.dt(g,g.ga3().cz(0,"notification")).B(0,P.V(["title","TradingKaFunda","body",H.b(e)+" - Target 1 and 2 Achieved","time",C.c.a5(d,0,C.c.hh(d,".")),"companyID",l.f],k,h))
@@ -66416,34 +66416,35 @@ i=m.z
 h="companyMaster/"+H.b(l.f)
 s=44
 return P.Z(O.du(i,i.ga3().cA(0,h)).c_(0),$async$dX,r)
-case 44:f=c
+case 44:f=a0
 e=O.h2(f.ga3().ee(0),f.gbS()).h(0,"name")
 O.dt(i,i.ga3().cz(0,"notification")).B(0,P.V(["title","TradingKaFunda","body",H.b(e)+" - Target 1 Achieved","time",C.c.a5(d,0,C.c.hh(d,".")),"companyID",l.f],k,t.z))
 case 37:s=34
 break
 case 35:l.d=[]
-case 34:case 24:s=J.U(J.U(l.c,3),"isAchieved")?45:46
+case 34:s=!J.U(J.U(l.c,0),"isAchieved")&&J.U(J.U(l.c,3),"isAchieved")?45:46
 break
 case 45:J.cH(j,new R.mN("Stop Loss Hit, Call Closed",new P.bb(Date.now(),!1).j(0)).lO())
 k=m.z
 i="companyMaster/"+H.b(l.f)
 s=47
 return P.Z(O.du(k,k.ga3().cA(0,i)).c_(0),$async$dX,r)
-case 47:f=c
+case 47:f=a0
 e=O.h2(f.ga3().ee(0),f.gbS()).h(0,"name")
 d=new P.bb(Date.now(),!1).j(0)
-O.dt(k,k.ga3().cz(0,"notification")).B(0,P.V(["title","TradingKaFunda","body",H.b(e)+" -  Loss Hit, Call Closed","time",C.c.a5(d,0,C.c.hh(d,".")),"companyID",l.f],t.X,t.z))
+O.dt(k,k.ga3().cz(0,"notification")).B(0,P.V(["title","TradingKaFunda","body",H.b(e)+" - Stop Loss Hit, Call Closed","time",C.c.a5(d,0,C.c.hh(d,".")),"companyID",l.f],t.X,t.z))
 l.e=2
-case 46:k=m.z
+case 46:case 24:k=m.z
 i="marketType/"+H.b(l.b)+"/data/"+H.b(l.Q)
 s=48
 return P.Z(O.du(k,k.ga3().cA(0,i)).a.ay(0,O.Lj(P.V(["callType",l.e,"commentList",j,"entryRate",l.x,"targetList",l.c],t.X,t.z))),$async$dX,r)
-case 48:case 5:s=49
+case 48:case 5:for(k=m.ch,i=k.length,h=l.f,c=0;c<i;++c)if(k[c].f==h)k[c]=l
+s=49
 q=[1]
-return P.Z(P.cT(new K.iw(m.Q,m.ch,0,null,"List Updated")),$async$dX,r)
+return P.Z(P.cT(new K.iw(m.Q,k,m.cy,null,"List Updated")),$async$dX,r)
 case 49:case 1:return P.Z(null,0,r)
 case 2:return P.Z(o,1,r)}})
-var s=0,r=P.e7($async$dX,t.Px),q,p=2,o,n=[],m=this,l,k,j,i,h,g,f,e,d
+var s=0,r=P.e7($async$dX,t.Px),q,p=2,o,n=[],m=this,l,k,j,i,h,g,f,e,d,c
 return P.e8(r)},
 P1:function(a){if(a==="Equity")return"8aZgu0c972tcLBG7eVbS"
 else if(a==="Commodity")return"esocmi1yZ7BrQEdw0VsL"
@@ -66991,9 +66992,8 @@ if(s!=null)l.a.d=b.a[s]
 s=b.d
 r=s!=null
 if(r){q=b.b
-l.a.e=q[C.b.BF(q,new S.aaF(b))].r}if(b.e!=null){q=l.a
-q.e=q.d=null
-N.K6("Market details updated successfully",a,C.W,1,0,C.k)}if(r){r=l.a
+l.a.e=q[C.b.BF(q,new S.aaF(b))].r}if(b.e!=null)N.K6("Market details updated successfully",a,C.W,1,0,C.k)
+if(r){r=l.a
 q=r.cx
 p=r.cy
 o=r.db
@@ -67198,6 +67198,7 @@ $S:1}
 S.aaJ.prototype={
 $0:function(){var s,r,q,p=new R.ix(),o=this.b.d
 p.f=o.f
+p.r=o.r
 p.b=o.b
 p.a=o.a
 p.Q=o.Q
@@ -67319,6 +67320,7 @@ $S:1}
 S.aaX.prototype={
 $0:function(){var s,r,q,p=new R.ix(),o=this.b.d
 p.f=o.f
+p.r=o.r
 p.b=o.b
 p.a=o.a
 p.Q=o.Q
