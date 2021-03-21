@@ -339,26 +339,27 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         } else {
           event.updatedData.commentList = List();
         }
-      }
-      if (event.updatedData.targetList[3]["isAchieved"]) {
-        commentList.add(
-            Comment("Stop Loss Hit, Call Closed", DateTime.now().toString())
-                .toMap());
-        var companyDetails = await firestore
-            .doc("companyMaster/${event.updatedData.companyID}")
-            .get();
-        var companyName = companyDetails.data()["name"];
-        var time = DateTime.now().toString();
-        firestore.collection("notification").add({
-          "title": "TradingKaFunda",
-          "body": "$companyName -  Loss Hit, Call Closed",
-          "time": time.substring(
-            0,
-            time.lastIndexOf("."),
-          ),
-          "companyID": event.updatedData.companyID
-        });
-        event.updatedData.callType = 2;
+        if (!event.updatedData.targetList[0]["isAchieved"] &&
+            event.updatedData.targetList[3]["isAchieved"]) {
+          commentList.add(
+              Comment("Stop Loss Hit, Call Closed", DateTime.now().toString())
+                  .toMap());
+          var companyDetails = await firestore
+              .doc("companyMaster/${event.updatedData.companyID}")
+              .get();
+          var companyName = companyDetails.data()["name"];
+          var time = DateTime.now().toString();
+          firestore.collection("notification").add({
+            "title": "TradingKaFunda",
+            "body": "$companyName - Stop Loss Hit, Call Closed",
+            "time": time.substring(
+              0,
+              time.lastIndexOf("."),
+            ),
+            "companyID": event.updatedData.companyID
+          });
+          event.updatedData.callType = 2;
+        }
       }
       var reference = await firestore
           .doc(
@@ -370,7 +371,12 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         "targetList": event.updatedData.targetList,
       });
     }
-    yield ManagemarketLoaded(marketDataList, 0,
+    for (int i = 0; i < companyList.length; i++) {
+      if (companyList[i].companyID == event.updatedData.companyID) {
+        companyList[i] = event.updatedData;
+      }
+    }
+    yield ManagemarketLoaded(marketDataList, selectedIndex,
         message: "List Updated", companyList: companyList);
   }
 

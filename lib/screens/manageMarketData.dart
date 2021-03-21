@@ -155,8 +155,6 @@ class _ManageScreenState extends State<ManageScreen> {
                 .companyName;
           }
           if (state.message != null) {
-            dropdownValue = null;
-            dropdownValue1 = null;
             Toast.show('Market details updated successfully', context,
                 backgroundColor: Colors.blue,
                 textColor: Colors.white,
@@ -560,6 +558,8 @@ class _ManageScreenState extends State<ManageScreen> {
                                     MarketTypeData();
                                 marketTypeData.companyID =
                                     state.selectedData.companyID;
+                                marketTypeData.companyName =
+                                    state.selectedData.companyName;
                                 marketTypeData.marketTypeId =
                                     state.selectedData.marketTypeId;
                                 marketTypeData.marketTypeName =
@@ -979,6 +979,8 @@ class _ManageScreenState extends State<ManageScreen> {
                                     MarketTypeData();
                                 marketTypeData.companyID =
                                     state.selectedData.companyID;
+                                marketTypeData.companyName =
+                                    state.selectedData.companyName;
                                 marketTypeData.marketTypeId =
                                     state.selectedData.marketTypeId;
                                 marketTypeData.marketTypeName =
