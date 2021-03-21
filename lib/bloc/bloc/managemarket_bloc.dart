@@ -114,6 +114,9 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
       }
       if (company.companyName != '') companyList.add(company);
     }
+    companyList.sort((a, b) {
+      return a.companyName.toLowerCase().compareTo(b.companyName.toLowerCase());
+    });
     yield ManagemarketLoaded(marketDataList, event.selectedIndex,
         companyList: companyList);
   }
@@ -231,26 +234,29 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
       }
       if (selectedData.targetList[0]["isAchieved"]) {
         if (selectedData.targetList[1]["isAchieved"]) {
-          if (event.updatedData.targetList[2]["isAchieved"]) {
-            commentList.add({
-              "comment": "All Targets Achieved, Call Closed",
-              "time": DateTime.now().toString()
-            });
-            var companyDetails = await firestore
-                .doc("companyMaster/${event.updatedData.companyID}")
-                .get();
-            var companyName = companyDetails.data()["name"];
-            var time = DateTime.now().toString();
-            firestore.collection("notification").add({
-              "title": "TradingKaFunda",
-              "body": "$companyName - All Targets Achieved, Call Closed",
-              "time": time.substring(
-                0,
-                time.lastIndexOf("."),
-              ),
-              "companyID": event.updatedData.companyID
-            });
-            event.updatedData.callType = 2;
+          if (!selectedData.targetList[2]["isAchieved"] != null &&
+              !selectedData.targetList[2]["isAchieved"]) {
+            if (event.updatedData.targetList[2]["isAchieved"]) {
+              commentList.add({
+                "comment": "All Targets Achieved, Call Closed",
+                "time": DateTime.now().toString()
+              });
+              var companyDetails = await firestore
+                  .doc("companyMaster/${event.updatedData.companyID}")
+                  .get();
+              var companyName = companyDetails.data()["name"];
+              var time = DateTime.now().toString();
+              firestore.collection("notification").add({
+                "title": "TradingKaFunda",
+                "body": "$companyName - All Targets Achieved, Call Closed",
+                "time": time.substring(
+                  0,
+                  time.lastIndexOf("."),
+                ),
+                "companyID": event.updatedData.companyID
+              });
+              event.updatedData.callType = 2;
+            }
           }
         } else {
           commentList.add({
@@ -336,8 +342,6 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
               "companyID": event.updatedData.companyID
             });
           }
-        } else {
-          event.updatedData.commentList = List();
         }
         if (!event.updatedData.targetList[0]["isAchieved"] &&
             event.updatedData.targetList[3]["isAchieved"]) {
@@ -371,6 +375,7 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         "targetList": event.updatedData.targetList,
       });
     }
+
     for (int i = 0; i < companyList.length; i++) {
       if (companyList[i].companyID == event.updatedData.companyID) {
         companyList[i] = event.updatedData;

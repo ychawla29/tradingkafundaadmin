@@ -277,7 +277,7 @@ class _ManageScreenState extends State<ManageScreen> {
                             child: Text(value.companyName),
                           );
                         }).toList(),
-                        hint: Text("Select Comapany Name"),
+                        hint: Text("Select Company Name"),
                         onChanged: (newValue) {
                           MarketTypeData marketTypeData;
                           BlocProvider.of<ManagemarketBloc>(context).add(
