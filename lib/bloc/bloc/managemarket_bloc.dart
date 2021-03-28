@@ -132,42 +132,40 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
     yield ManagemarketInitial();
     print(
         "marketType/${event.updatedData.marketTypeId}/data/${event.updatedData.docId}");
+
+    var companyDetails = await firestore
+        .doc("companyMaster/${event.updatedData.companyID}")
+        .get();
+    var time = DateTime.now().toString();
+    var companyName = companyDetails.data()["name"];
+
     if (selectedData.isNew) {
-      List<dynamic> commentList = List();
-      if (event.updatedData.targetList[0]["isAchieved"] != null &&
-          event.updatedData.targetList[0]["isAchieved"]) {
+      List<dynamic> commentList = [];
+
+      if (event.updatedData.targetList[0]["isAchieved"]) {
         if (event.updatedData.targetList[1]["isAchieved"]) {
           if (event.updatedData.targetList[2]["isAchieved"]) {
-            commentList.add(Comment("All Targets Achieved, Call Closed",
-                    DateTime.now().toString())
-                .toMap());
-            var companyDetails = await firestore
-                .doc("companyMaster/${event.updatedData.companyID}")
-                .get();
-            var companyName = companyDetails.data()["name"];
-            var time = DateTime.now().toString();
+            commentList
+                .add(Comment("All Targets Achieved call closed", time).toMap());
+
             firestore.collection("notification").add({
               "title": "TradingKaFunda",
-              "body": "$companyName - All Targets Achieved, Call Closed",
+              "body": "$companyName - All Targets Achieved call closed",
               "time": time.substring(
                 0,
                 time.lastIndexOf("."),
               ),
               "companyID": event.updatedData.companyID
             });
+
             event.updatedData.callType = 2;
           } else {
-            commentList.add(
-                Comment("Target 1 and 2 Achieved", DateTime.now().toString())
-                    .toMap());
-            var companyDetails = await firestore
-                .doc("companyMaster/${event.updatedData.companyID}")
-                .get();
-            var companyName = companyDetails.data()["name"];
-            var time = DateTime.now().toString();
+            commentList
+                .add(Comment("Target 1 and Target 2 Achieved", time).toMap());
+
             firestore.collection("notification").add({
               "title": "TradingKaFunda",
-              "body": "$companyName - Target 1 and 2 Achieved",
+              "body": "$companyName - Target 1 and Target 2 Achieved",
               "time": time.substring(
                 0,
                 time.lastIndexOf("."),
@@ -175,14 +173,23 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
               "companyID": event.updatedData.companyID
             });
           }
+        } else if (event.updatedData.targetList[3]["isAchieved"]) {
+          commentList.add(Comment("Stop Loss Hit, Call Closed", time).toMap());
+
+          firestore.collection("notification").add({
+            "title": "TradingKaFunda",
+            "body": "$companyName - Stop Loss Hit, Call Closed",
+            "time": time.substring(
+              0,
+              time.lastIndexOf("."),
+            ),
+            "companyID": event.updatedData.companyID
+          });
+
+          event.updatedData.callType = 2;
         } else {
-          commentList.add(
-              Comment("Target 1 Achieved", DateTime.now().toString()).toMap());
-          var companyDetails = await firestore
-              .doc("companyMaster/${event.updatedData.companyID}")
-              .get();
-          var companyName = companyDetails.data()["name"];
-          var time = DateTime.now().toString();
+          commentList.add(Comment("Target 1 Achieved", time).toMap());
+
           firestore.collection("notification").add({
             "title": "TradingKaFunda",
             "body": "$companyName - Target 1 Achieved",
@@ -193,125 +200,103 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
             "companyID": event.updatedData.companyID
           });
         }
-      } else if (event.updatedData.targetList[3]["isAchived"] != null &&
-          event.updatedData.targetList[3]["isAchived"]) {
-        commentList.add(
-            Comment("Stop Loss hit, Call Closed", DateTime.now().toString())
-                .toMap());
-        var companyDetails = await firestore
-            .doc("companyMaster/${event.updatedData.companyID}")
-            .get();
-        var companyName = companyDetails.data()["name"];
-        var time = DateTime.now().toString();
+      } else if (event.updatedData.targetList[3]["isAchieved"]) {
+        commentList.add(Comment("Stop Loss Hit, Call Closed", time).toMap());
+
         firestore.collection("notification").add({
           "title": "TradingKaFunda",
-          "body": "$companyName - Stop Loss hit, Call Closed",
+          "body": "$companyName - Stop Loss Hit, Call Closed",
           "time": time.substring(
             0,
             time.lastIndexOf("."),
           ),
           "companyID": event.updatedData.companyID
         });
+
         event.updatedData.callType = 2;
       }
-      var reference = await firestore
-          .doc(
-              "marketType/${event.updatedData.marketTypeId}/data/${event.updatedData.docId}")
-          .update({
-        "isNew": false,
-        "callType": event.updatedData.callType,
-        "commentList": commentList,
-        "entryRate": event.updatedData.entryRate,
-        "targetList": event.updatedData.targetList,
-        "updatedOn": DateTime.now().toString(),
-      });
       event.updatedData.commentList = commentList;
     } else {
       List<dynamic> commentList = selectedData.commentList;
-      print("CommentList: ${selectedData.commentList}");
+
       if (commentList == null) {
-        commentList = List();
+        commentList = [];
       }
+
       if (selectedData.targetList[0]["isAchieved"]) {
         if (selectedData.targetList[1]["isAchieved"]) {
-          if (event.updatedData.targetList[2]["isAchieved"]) {
-            commentList.add({
-              "comment": "All Targets Achieved, Call Closed",
-              "time": DateTime.now().toString()
-            });
-            var companyDetails = await firestore
-                .doc("companyMaster/${event.updatedData.companyID}")
-                .get();
-            var companyName = companyDetails.data()["name"];
-            var time = DateTime.now().toString();
-            firestore.collection("notification").add({
-              "title": "TradingKaFunda",
-              "body": "$companyName - All Targets Achieved, Call Closed",
-              "time": time.substring(
-                0,
-                time.lastIndexOf("."),
-              ),
-              "companyID": event.updatedData.companyID
-            });
-            event.updatedData.callType = 2;
-          }
-        } else {
-          commentList.add({
-            "comment": "Target 2 Achieved",
-            "time": DateTime.now().toString()
-          });
-
-          var time = DateTime.now().toString();
-          var companyDetails = await firestore
-              .doc("companyMaster/${event.updatedData.companyID}")
-              .get();
-          var companyName = companyDetails.data()["name"];
-          firestore.collection("notification").add({
-            "title": "TradingKaFunda",
-            "body": "$companyName - Target 2 Achieved",
-            "time": time.substring(
-              0,
-              time.lastIndexOf("."),
-            ),
-            "companyID": event.updatedData.companyID
-          });
-        }
-      } else {
-        if (event.updatedData.targetList[0]["isAchieved"]) {
-          if (event.updatedData.targetList[1]["isAchieved"]) {
+          if (selectedData.targetList[2]["isAchieved"]) {
+          } else {
             if (event.updatedData.targetList[2]["isAchieved"]) {
-              commentList.add({
-                "comment": "All Targets Achieved, Call Closed",
-                "time": DateTime.now().toString()
-              });
-              var companyDetails = await firestore
-                  .doc("companyMaster/${event.updatedData.companyID}")
-                  .get();
-              var companyName = companyDetails.data()["name"];
-              var time = DateTime.now().toString();
+              commentList
+                  .add(Comment("Target 3 Achieved, Call Closed", time).toMap());
+
               firestore.collection("notification").add({
                 "title": "TradingKaFunda",
-                "body": "$companyName - All Targets Achieved, Call Closed",
+                "body": "$companyName - Target 3 Achieved, Call Closed",
                 "time": time.substring(
                   0,
                   time.lastIndexOf("."),
                 ),
                 "companyID": event.updatedData.companyID
               });
+
               event.updatedData.callType = 2;
-            } else {
-              commentList.add({
-                "comment": "Target 1 and 2 Achieved",
-                "time": DateTime.now().toString()
-              });
-              var companyDetails = await firestore
-                  .doc("companyMaster/${event.updatedData.companyID}")
-                  .get();
-              var companyName = companyDetails.data()["name"];
-              var time = DateTime.now().toString();
+            } else if (event.updatedData.targetList[3]["isAchieved"]) {
+              commentList
+                  .add(Comment("Stop Loss Hit, Call Closed", time).toMap());
+
               firestore.collection("notification").add({
                 "title": "TradingKaFunda",
-                "body": "$companyName - Target 1 and 2 Achieved",
+                "body": "$companyName - Stop Loss Hit, Call Closed",
+                "time": time.substring(
+                  0,
+                  time.lastIndexOf("."),
+                ),
+                "companyID": event.updatedData.companyID
+              });
+
+              event.updatedData.callType = 2;
+            }
+          }
+        } else {
+          if (event.updatedData.targetList[1]["isAchieved"]) {
+            if (event.updatedData.targetList[2]["isAchieved"]) {
+              commentList.add(
+                  Comment("All Targets Achieved call closed", time).toMap());
+
+              firestore.collection("notificatison").add({
+                "title": "TradingKaFunda",
+                "body": "$companyName - All Targets Achieved call closed",
+                "time": time.substring(
+                  0,
+                  time.lastIndexOf("."),
+                ),
+                "companyID": event.updatedData.companyID
+              });
+
+              event.updatedData.callType = 2;
+            } else if (event.updatedData.targetList[3]["isAchieved"]) {
+              commentList
+                  .add(Comment("Stop Loss Hit, Call Closed", time).toMap());
+
+              firestore.collection("notification").add({
+                "title": "TradingKaFunda",
+                "body": "$companyName - Stop Loss Hit, Call Closed",
+                "time": time.substring(
+                  0,
+                  time.lastIndexOf("."),
+                ),
+                "companyID": event.updatedData.companyID
+              });
+
+              event.updatedData.callType = 2;
+            } else {
+              commentList.add(Comment("Target 2 Achieved", time).toMap());
+
+              firestore.collection("notification").add({
+                "title": "TradingKaFunda",
+                "body": "$companyName - Target 2 Achieved",
                 "time": time.substring(
                   0,
                   time.lastIndexOf("."),
@@ -319,16 +304,73 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
                 "companyID": event.updatedData.companyID
               });
             }
-          } else {
-            var time = DateTime.now().toString();
-            commentList.add({
-              "comment": "Target 1 Achieved",
-              "time": DateTime.now().toString()
+          } else if (event.updatedData.targetList[3]["isAchieved"]) {
+            commentList
+                .add(Comment("Stop Loss Hit, Call Closed", time).toMap());
+
+            firestore.collection("notification").add({
+              "title": "TradingKaFunda",
+              "body": "$companyName - Stop Loss Hit, Call Closed",
+              "time": time.substring(
+                0,
+                time.lastIndexOf("."),
+              ),
+              "companyID": event.updatedData.companyID
             });
-            var companyDetails = await firestore
-                .doc("companyMaster/${event.updatedData.companyID}")
-                .get();
-            var companyName = companyDetails.data()["name"];
+
+            event.updatedData.callType = 2;
+          }
+        }
+      } else {
+        if (event.updatedData.targetList[0]["isAchieved"]) {
+          if (event.updatedData.targetList[1]["isAchieved"]) {
+            if (event.updatedData.targetList[2]["isAchieved"]) {
+              commentList.add(
+                  Comment("All Targets Achieved call closed", time).toMap());
+
+              firestore.collection("notification").add({
+                "title": "TradingKaFunda",
+                "body": "$companyName - All Targets Achieved call closed",
+                "time": time.substring(
+                  0,
+                  time.lastIndexOf("."),
+                ),
+                "companyID": event.updatedData.companyID
+              });
+
+              event.updatedData.callType = 2;
+            } else {
+              commentList
+                  .add(Comment("Target 1 and Target 2 Achieved", time).toMap());
+
+              firestore.collection("notification").add({
+                "title": "TradingKaFunda",
+                "body": "$companyName - Target 1 and Target 2 Achieved",
+                "time": time.substring(
+                  0,
+                  time.lastIndexOf("."),
+                ),
+                "companyID": event.updatedData.companyID
+              });
+            }
+          } else if (event.updatedData.targetList[3]["isAchieved"]) {
+            commentList
+                .add(Comment("Stop Loss Hit, Call Closed", time).toMap());
+
+            firestore.collection("notification").add({
+              "title": "TradingKaFunda",
+              "body": "$companyName - Stop Loss Hit, Call Closed",
+              "time": time.substring(
+                0,
+                time.lastIndexOf("."),
+              ),
+              "companyID": event.updatedData.companyID
+            });
+
+            event.updatedData.callType = 2;
+          } else {
+            commentList.add(Comment("Target 1 Achieved", time).toMap());
+
             firestore.collection("notification").add({
               "title": "TradingKaFunda",
               "body": "$companyName - Target 1 Achieved",
@@ -339,48 +381,42 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
               "companyID": event.updatedData.companyID
             });
           }
-        } else {
-          event.updatedData.commentList = List();
+        } else if (event.updatedData.targetList[3]["isAchieved"]) {
+          commentList.add(Comment("Stop Loss Hit, Call Closed", time).toMap());
+
+          firestore.collection("notification").add({
+            "title": "TradingKaFunda",
+            "body": "$companyName - Stop Loss Hit, Call Closed",
+            "time": time.substring(
+              0,
+              time.lastIndexOf("."),
+            ),
+            "companyID": event.updatedData.companyID
+          });
+
+          event.updatedData.callType = 2;
         }
       }
-      if (event.updatedData.targetList[3]["isAchieved"]) {
-        commentList.add(
-            Comment("Stop Loss Hit, Call Closed", DateTime.now().toString())
-                .toMap());
-        var companyDetails = await firestore
-            .doc("companyMaster/${event.updatedData.companyID}")
-            .get();
-        var companyName = companyDetails.data()["name"];
-        var time = DateTime.now().toString();
-        firestore.collection("notification").add({
-          "title": "TradingKaFunda",
-          "body": "$companyName -  Loss Hit, Call Closed",
-          "time": time.substring(
-            0,
-            time.lastIndexOf("."),
-          ),
-          "companyID": event.updatedData.companyID
-        });
-        event.updatedData.callType = 2;
-      }
-      var reference = await firestore
-          .doc(
-              "marketType/${event.updatedData.marketTypeId}/data/${event.updatedData.docId}")
-          .update({
-        "callType": event.updatedData.callType,
-        "commentList": commentList,
-        "entryRate": event.updatedData.entryRate,
-        "targetList": event.updatedData.targetList,
-        "updatedOn": DateTime.now().toString(),
-      });
       event.updatedData.commentList = commentList;
     }
+
+    var reference = await firestore
+        .doc(
+            "marketType/${event.updatedData.marketTypeId}/data/${event.updatedData.docId}")
+        .update({
+      "callType": event.updatedData.callType,
+      "commentList": event.updatedData.commentList,
+      "entryRate": event.updatedData.entryRate,
+      "targetList": event.updatedData.targetList,
+      "updatedOn": DateTime.now().toString(),
+    });
 
     for (int i = 0; i < companyList.length; i++) {
       if (companyList[i].companyID == event.updatedData.companyID) {
         companyList[i] = event.updatedData;
       }
     }
+
     yield ManagemarketLoaded(marketDataList, selectedIndex,
         message: "List Updated", companyList: companyList);
   }
