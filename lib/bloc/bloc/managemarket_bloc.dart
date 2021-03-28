@@ -216,6 +216,17 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         event.updatedData.callType = 2;
       }
       event.updatedData.commentList = commentList;
+      var reference = await firestore
+          .doc(
+              "marketType/${event.updatedData.marketTypeId}/data/${event.updatedData.docId}")
+          .update({
+        "isNew": false,
+        "callType": event.updatedData.callType,
+        "commentList": event.updatedData.commentList,
+        "entryRate": event.updatedData.entryRate,
+        "targetList": event.updatedData.targetList,
+        "updatedOn": DateTime.now().toString(),
+      });
     } else {
       List<dynamic> commentList = selectedData.commentList;
 
@@ -398,18 +409,17 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         }
       }
       event.updatedData.commentList = commentList;
+      var reference = await firestore
+          .doc(
+              "marketType/${event.updatedData.marketTypeId}/data/${event.updatedData.docId}")
+          .update({
+        "callType": event.updatedData.callType,
+        "commentList": event.updatedData.commentList,
+        "entryRate": event.updatedData.entryRate,
+        "targetList": event.updatedData.targetList,
+        "updatedOn": DateTime.now().toString(),
+      });
     }
-
-    var reference = await firestore
-        .doc(
-            "marketType/${event.updatedData.marketTypeId}/data/${event.updatedData.docId}")
-        .update({
-      "callType": event.updatedData.callType,
-      "commentList": event.updatedData.commentList,
-      "entryRate": event.updatedData.entryRate,
-      "targetList": event.updatedData.targetList,
-      "updatedOn": DateTime.now().toString(),
-    });
 
     for (int i = 0; i < companyList.length; i++) {
       if (companyList[i].companyID == event.updatedData.companyID) {
