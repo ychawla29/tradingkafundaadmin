@@ -276,7 +276,7 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
               commentList.add(
                   Comment("All Targets Achieved call closed", time).toMap());
 
-              firestore.collection("notificatison").add({
+              firestore.collection("notification").add({
                 "title": "TradingKaFunda",
                 "body": "$companyName - All Targets Achieved call closed",
                 "time": time.substring(
