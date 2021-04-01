@@ -66318,7 +66318,7 @@ O.co(k,k.gal().bP(0,"notification")).A(0,P.V(["title","TradingKaFunda","body",H.
 l.e=2}else if(J.P(J.P(l.c,3),"isAchieved")){J.cu(f,new R.du("Stop Loss Hit, Call Closed",h).dD())
 O.co(k,k.gal().bP(0,"notification")).A(0,P.V(["title","TradingKaFunda","body",H.b(g)+" - Stop Loss Hit, Call Closed","time",C.c.a2(h,0,C.c.dT(h,".")),"companyID",l.f],t.X,t.z))
 l.e=2}}else if(J.P(J.P(l.c,1),"isAchieved"))if(J.P(J.P(l.c,2),"isAchieved")){J.cu(f,new R.du("All Targets Achieved call closed",h).dD())
-O.co(k,k.gal().bP(0,"notificatison")).A(0,P.V(["title","TradingKaFunda","body",H.b(g)+" - All Targets Achieved call closed","time",C.c.a2(h,0,C.c.dT(h,".")),"companyID",l.f],t.X,t.z))
+O.co(k,k.gal().bP(0,"notification")).A(0,P.V(["title","TradingKaFunda","body",H.b(g)+" - All Targets Achieved call closed","time",C.c.a2(h,0,C.c.dT(h,".")),"companyID",l.f],t.X,t.z))
 l.e=2}else{j=J.bK(f)
 e=t.X
 d=t.z
