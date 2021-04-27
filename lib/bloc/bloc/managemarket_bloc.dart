@@ -141,6 +141,10 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
 
     if (selectedData.isNew) {
       List<dynamic> commentList = [];
+      String digits = "%.2f";
+      if (event.updatedData.marketTypeName == "Forex") {
+        digits = "%.4f";
+      }
 
       if (event.updatedData.targetList[0]["isAchieved"]) {
         if (event.updatedData.targetList[1]["isAchieved"]) {
@@ -155,7 +159,10 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
                 0,
                 time.lastIndexOf("."),
               ),
-              "companyID": event.updatedData.companyID
+              "companyID": event.updatedData.companyID,
+              "dataCollectionId": event.updatedData.docId,
+              "marketCollectionId": event.updatedData.marketTypeId,
+              "digits": digits
             });
 
             event.updatedData.callType = 2;
@@ -170,7 +177,10 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
                 0,
                 time.lastIndexOf("."),
               ),
-              "companyID": event.updatedData.companyID
+              "companyID": event.updatedData.companyID,
+              "dataCollectionId": event.updatedData.docId,
+              "marketCollectionId": event.updatedData.marketTypeId,
+              "digits": digits
             });
           }
         } else if (event.updatedData.targetList[3]["isAchieved"]) {
@@ -183,7 +193,10 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
               0,
               time.lastIndexOf("."),
             ),
-            "companyID": event.updatedData.companyID
+            "companyID": event.updatedData.companyID,
+            "dataCollectionId": event.updatedData.docId,
+            "marketCollectionId": event.updatedData.marketTypeId,
+            "digits": digits
           });
 
           event.updatedData.callType = 2;
@@ -197,7 +210,10 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
               0,
               time.lastIndexOf("."),
             ),
-            "companyID": event.updatedData.companyID
+            "companyID": event.updatedData.companyID,
+            "dataCollectionId": event.updatedData.docId,
+            "marketCollectionId": event.updatedData.marketTypeId,
+            "digits": digits
           });
         }
       } else if (event.updatedData.targetList[3]["isAchieved"]) {
@@ -210,10 +226,28 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
             0,
             time.lastIndexOf("."),
           ),
-          "companyID": event.updatedData.companyID
+          "companyID": event.updatedData.companyID,
+          "dataCollectionId": event.updatedData.docId,
+          "marketCollectionId": event.updatedData.marketTypeId,
+          "digits": digits
         });
 
         event.updatedData.callType = 2;
+      } else {
+        commentList.add(Comment("Call Updated", time).toMap());
+
+        firestore.collection("notification").add({
+          "title": "TradingKaFunda",
+          "body": "$companyName - Call Updated",
+          "time": time.substring(
+            0,
+            time.lastIndexOf("."),
+          ),
+          "companyID": event.updatedData.companyID,
+          "dataCollectionId": event.updatedData.docId,
+          "marketCollectionId": event.updatedData.marketTypeId,
+          "digits": digits
+        });
       }
       event.updatedData.commentList = commentList;
       var reference = await firestore
@@ -229,6 +263,11 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
       });
     } else {
       List<dynamic> commentList = selectedData.commentList;
+
+      String digits = "%.2f";
+      if (event.updatedData.marketTypeName == "Forex") {
+        digits = "%.4f";
+      }
 
       if (commentList == null) {
         commentList = [];
@@ -249,7 +288,10 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
                   0,
                   time.lastIndexOf("."),
                 ),
-                "companyID": event.updatedData.companyID
+                "companyID": event.updatedData.companyID,
+                "dataCollectionId": event.updatedData.docId,
+                "marketCollectionId": event.updatedData.marketTypeId,
+                "digits": digits
               });
 
               event.updatedData.callType = 2;
@@ -264,7 +306,10 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
                   0,
                   time.lastIndexOf("."),
                 ),
-                "companyID": event.updatedData.companyID
+                "companyID": event.updatedData.companyID,
+                "dataCollectionId": event.updatedData.docId,
+                "marketCollectionId": event.updatedData.marketTypeId,
+                "digits": digits
               });
 
               event.updatedData.callType = 2;
@@ -283,7 +328,10 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
                   0,
                   time.lastIndexOf("."),
                 ),
-                "companyID": event.updatedData.companyID
+                "companyID": event.updatedData.companyID,
+                "dataCollectionId": event.updatedData.docId,
+                "marketCollectionId": event.updatedData.marketTypeId,
+                "digits": digits
               });
 
               event.updatedData.callType = 2;
@@ -298,7 +346,10 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
                   0,
                   time.lastIndexOf("."),
                 ),
-                "companyID": event.updatedData.companyID
+                "companyID": event.updatedData.companyID,
+                "dataCollectionId": event.updatedData.docId,
+                "marketCollectionId": event.updatedData.marketTypeId,
+                "digits": digits
               });
 
               event.updatedData.callType = 2;
@@ -312,7 +363,10 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
                   0,
                   time.lastIndexOf("."),
                 ),
-                "companyID": event.updatedData.companyID
+                "companyID": event.updatedData.companyID,
+                "dataCollectionId": event.updatedData.docId,
+                "marketCollectionId": event.updatedData.marketTypeId,
+                "digits": digits
               });
             }
           } else if (event.updatedData.targetList[3]["isAchieved"]) {
@@ -326,10 +380,28 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
                 0,
                 time.lastIndexOf("."),
               ),
-              "companyID": event.updatedData.companyID
+              "companyID": event.updatedData.companyID,
+              "dataCollectionId": event.updatedData.docId,
+              "marketCollectionId": event.updatedData.marketTypeId,
+              "digits": digits
             });
 
             event.updatedData.callType = 2;
+          } else {
+            commentList.add(Comment("Call Updated", time).toMap());
+
+            firestore.collection("notification").add({
+              "title": "TradingKaFunda",
+              "body": "$companyName - Call Updated",
+              "time": time.substring(
+                0,
+                time.lastIndexOf("."),
+              ),
+              "companyID": event.updatedData.companyID,
+              "dataCollectionId": event.updatedData.docId,
+              "marketCollectionId": event.updatedData.marketTypeId,
+              "digits": digits
+            });
           }
         }
       } else {
@@ -346,7 +418,10 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
                   0,
                   time.lastIndexOf("."),
                 ),
-                "companyID": event.updatedData.companyID
+                "companyID": event.updatedData.companyID,
+                "dataCollectionId": event.updatedData.docId,
+                "marketCollectionId": event.updatedData.marketTypeId,
+                "digits": digits
               });
 
               event.updatedData.callType = 2;
@@ -361,7 +436,10 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
                   0,
                   time.lastIndexOf("."),
                 ),
-                "companyID": event.updatedData.companyID
+                "companyID": event.updatedData.companyID,
+                "dataCollectionId": event.updatedData.docId,
+                "marketCollectionId": event.updatedData.marketTypeId,
+                "digits": digits
               });
             }
           } else if (event.updatedData.targetList[3]["isAchieved"]) {
@@ -375,7 +453,10 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
                 0,
                 time.lastIndexOf("."),
               ),
-              "companyID": event.updatedData.companyID
+              "companyID": event.updatedData.companyID,
+              "dataCollectionId": event.updatedData.docId,
+              "marketCollectionId": event.updatedData.marketTypeId,
+              "digits": digits
             });
 
             event.updatedData.callType = 2;
@@ -389,7 +470,10 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
                 0,
                 time.lastIndexOf("."),
               ),
-              "companyID": event.updatedData.companyID
+              "companyID": event.updatedData.companyID,
+              "dataCollectionId": event.updatedData.docId,
+              "marketCollectionId": event.updatedData.marketTypeId,
+              "digits": digits
             });
           }
         } else if (event.updatedData.targetList[3]["isAchieved"]) {
@@ -402,10 +486,28 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
               0,
               time.lastIndexOf("."),
             ),
-            "companyID": event.updatedData.companyID
+            "companyID": event.updatedData.companyID,
+            "dataCollectionId": event.updatedData.docId,
+            "marketCollectionId": event.updatedData.marketTypeId,
+            "digits": digits
           });
 
           event.updatedData.callType = 2;
+        } else {
+          commentList.add(Comment("Call Updated", time).toMap());
+
+          firestore.collection("notification").add({
+            "title": "TradingKaFunda",
+            "body": "$companyName - Call Updated",
+            "time": time.substring(
+              0,
+              time.lastIndexOf("."),
+            ),
+            "companyID": event.updatedData.companyID,
+            "dataCollectionId": event.updatedData.docId,
+            "marketCollectionId": event.updatedData.marketTypeId,
+            "digits": digits
+          });
         }
       }
       event.updatedData.commentList = commentList;
