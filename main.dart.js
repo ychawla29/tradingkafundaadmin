@@ -66315,16 +66315,8 @@ O.bQ(k,k.gaa().bx(0,"notification")).w(0,P.V(["title","TradingKaFunda","body",H.
 m.db=!0
 O.bQ(k,k.gaa().bx(0,"notification")).w(0,P.V(["title","TradingKaFunda","body",H.b(g)+" - Call Updated","time",C.c.Z(h,0,C.c.cP(h,".")),"companyID",l.f,"dataCollectionId",l.Q,"marketCollectionId",l.b,"digits",e],j,d))}}l.d=f
 j="marketType/"+H.b(l.b)+"/data/"+H.b(l.Q)
-j=O.jv(k,k.gaa().dO(0,j))
-k=P.z(t.X,t.z)
-k.n(0,"isNew",!1)
-k.n(0,"callType",l.e)
-k.n(0,"commentList",l.d)
-k.n(0,"entryRate",l.x)
-k.n(0,"targetList",l.c)
-if(m.db)k.n(0,"updatedOn",new P.cL(Date.now(),!1).j(0))
 s=8
-return P.aa(j.a.ay(0,O.Li(k)),$async$kx,r)
+return P.aa(O.jv(k,k.gaa().dO(0,j)).a.ay(0,O.Li(P.V(["isNew",!1,"callType",l.e,"commentList",l.d,"entryRate",l.x,"targetList",l.c,"updatedOn",new P.cL(Date.now(),!1).j(0)],t.X,t.z))),$async$kx,r)
 case 8:m.db=!1
 s=6
 break
