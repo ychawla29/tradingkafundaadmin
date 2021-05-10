@@ -147,6 +147,8 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         digits = "%.4f";
       }
 
+      event.updatedData.isNew = false;
+
       if (event.updatedData.targetList[0]["isAchieved"]) {
         if (event.updatedData.targetList[1]["isAchieved"]) {
           if (event.updatedData.targetList[2]["isAchieved"]) {
@@ -332,6 +334,38 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
               });
 
               event.updatedData.callType = 2;
+            } else {
+              if (event.updatedData.callType == 2) {
+                commentList.add(Comment("Call Closed", time).toMap());
+                updateTime = true;
+                firestore.collection("notification").add({
+                  "title": "TradingKaFunda",
+                  "body": "$companyName - Call Closed",
+                  "time": time.substring(
+                    0,
+                    time.lastIndexOf("."),
+                  ),
+                  "companyID": event.updatedData.companyID,
+                  "dataCollectionId": event.updatedData.docId,
+                  "marketCollectionId": event.updatedData.marketTypeId,
+                  "digits": digits
+                });
+              } else {
+                commentList.add(Comment("Call Updated", time).toMap());
+                updateTime = true;
+                firestore.collection("notification").add({
+                  "title": "TradingKaFunda",
+                  "body": "$companyName - Call Updated",
+                  "time": time.substring(
+                    0,
+                    time.lastIndexOf("."),
+                  ),
+                  "companyID": event.updatedData.companyID,
+                  "dataCollectionId": event.updatedData.docId,
+                  "marketCollectionId": event.updatedData.marketTypeId,
+                  "digits": digits
+                });
+              }
             }
           }
         } else {
