@@ -277,7 +277,7 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         "commentList": event.updatedData.commentList,
         "entryRate": event.updatedData.entryRate,
         "targetList": event.updatedData.targetList,
-        if (updateTime) "updatedOn": DateTime.now().toString(),
+        "updatedOn": DateTime.now().toString(),
       });
       updateTime = false;
     } else {
