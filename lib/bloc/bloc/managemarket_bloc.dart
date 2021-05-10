@@ -18,6 +18,7 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
   List<MarketTypeData> companyList = List();
   MarketTypeData selectedData;
   int selectedIndex;
+  bool updateTime = false;
 
   @override
   Stream<ManagemarketState> mapEventToState(
@@ -235,7 +236,7 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         event.updatedData.callType = 2;
       } else {
         commentList.add(Comment("Call Updated", time).toMap());
-
+        updateTime = true;
         firestore.collection("notification").add({
           "title": "TradingKaFunda",
           "body": "$companyName - Call Updated",
@@ -259,8 +260,9 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         "commentList": event.updatedData.commentList,
         "entryRate": event.updatedData.entryRate,
         "targetList": event.updatedData.targetList,
-        "updatedOn": DateTime.now().toString(),
+        if (updateTime) "updatedOn": DateTime.now().toString(),
       });
+      updateTime = false;
     } else {
       List<dynamic> commentList = selectedData.commentList;
 
@@ -389,7 +391,7 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
             event.updatedData.callType = 2;
           } else {
             commentList.add(Comment("Call Updated", time).toMap());
-
+            updateTime = true;
             firestore.collection("notification").add({
               "title": "TradingKaFunda",
               "body": "$companyName - Call Updated",
@@ -495,7 +497,7 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
           event.updatedData.callType = 2;
         } else {
           commentList.add(Comment("Call Updated", time).toMap());
-
+          updateTime = true;
           firestore.collection("notification").add({
             "title": "TradingKaFunda",
             "body": "$companyName - Call Updated",
@@ -519,8 +521,9 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
         "commentList": event.updatedData.commentList,
         "entryRate": event.updatedData.entryRate,
         "targetList": event.updatedData.targetList,
-        "updatedOn": DateTime.now().toString(),
+        if (updateTime) "updatedOn": DateTime.now().toString(),
       });
+      updateTime = false;
     }
 
     for (int i = 0; i < companyList.length; i++) {
