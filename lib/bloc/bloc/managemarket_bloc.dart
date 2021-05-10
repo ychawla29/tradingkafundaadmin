@@ -235,20 +235,37 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
 
         event.updatedData.callType = 2;
       } else {
-        commentList.add(Comment("Call Updated", time).toMap());
-        updateTime = true;
-        firestore.collection("notification").add({
-          "title": "TradingKaFunda",
-          "body": "$companyName - Call Updated",
-          "time": time.substring(
-            0,
-            time.lastIndexOf("."),
-          ),
-          "companyID": event.updatedData.companyID,
-          "dataCollectionId": event.updatedData.docId,
-          "marketCollectionId": event.updatedData.marketTypeId,
-          "digits": digits
-        });
+        if (event.updatedData.callType == 2) {
+          commentList.add(Comment("Call Closed", time).toMap());
+          updateTime = true;
+          firestore.collection("notification").add({
+            "title": "TradingKaFunda",
+            "body": "$companyName - Call Closed",
+            "time": time.substring(
+              0,
+              time.lastIndexOf("."),
+            ),
+            "companyID": event.updatedData.companyID,
+            "dataCollectionId": event.updatedData.docId,
+            "marketCollectionId": event.updatedData.marketTypeId,
+            "digits": digits
+          });
+        } else {
+          commentList.add(Comment("Call Updated", time).toMap());
+          updateTime = true;
+          firestore.collection("notification").add({
+            "title": "TradingKaFunda",
+            "body": "$companyName - Call Updated",
+            "time": time.substring(
+              0,
+              time.lastIndexOf("."),
+            ),
+            "companyID": event.updatedData.companyID,
+            "dataCollectionId": event.updatedData.docId,
+            "marketCollectionId": event.updatedData.marketTypeId,
+            "digits": digits
+          });
+        }
       }
       event.updatedData.commentList = commentList;
       var reference = await firestore
@@ -390,20 +407,37 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
 
             event.updatedData.callType = 2;
           } else {
-            commentList.add(Comment("Call Updated", time).toMap());
-            updateTime = true;
-            firestore.collection("notification").add({
-              "title": "TradingKaFunda",
-              "body": "$companyName - Call Updated",
-              "time": time.substring(
-                0,
-                time.lastIndexOf("."),
-              ),
-              "companyID": event.updatedData.companyID,
-              "dataCollectionId": event.updatedData.docId,
-              "marketCollectionId": event.updatedData.marketTypeId,
-              "digits": digits
-            });
+            if (event.updatedData.callType == 2) {
+              commentList.add(Comment("Call Closed", time).toMap());
+              updateTime = true;
+              firestore.collection("notification").add({
+                "title": "TradingKaFunda",
+                "body": "$companyName - Call Closed",
+                "time": time.substring(
+                  0,
+                  time.lastIndexOf("."),
+                ),
+                "companyID": event.updatedData.companyID,
+                "dataCollectionId": event.updatedData.docId,
+                "marketCollectionId": event.updatedData.marketTypeId,
+                "digits": digits
+              });
+            } else {
+              commentList.add(Comment("Call Updated", time).toMap());
+              updateTime = true;
+              firestore.collection("notification").add({
+                "title": "TradingKaFunda",
+                "body": "$companyName - Call Updated",
+                "time": time.substring(
+                  0,
+                  time.lastIndexOf("."),
+                ),
+                "companyID": event.updatedData.companyID,
+                "dataCollectionId": event.updatedData.docId,
+                "marketCollectionId": event.updatedData.marketTypeId,
+                "digits": digits
+              });
+            }
           }
         }
       } else {
@@ -496,20 +530,37 @@ class ManagemarketBloc extends Bloc<ManagemarketEvent, ManagemarketState> {
 
           event.updatedData.callType = 2;
         } else {
-          commentList.add(Comment("Call Updated", time).toMap());
-          updateTime = true;
-          firestore.collection("notification").add({
-            "title": "TradingKaFunda",
-            "body": "$companyName - Call Updated",
-            "time": time.substring(
-              0,
-              time.lastIndexOf("."),
-            ),
-            "companyID": event.updatedData.companyID,
-            "dataCollectionId": event.updatedData.docId,
-            "marketCollectionId": event.updatedData.marketTypeId,
-            "digits": digits
-          });
+          if (event.updatedData.callType == 2) {
+            commentList.add(Comment("Call Closed", time).toMap());
+            updateTime = true;
+            firestore.collection("notification").add({
+              "title": "TradingKaFunda",
+              "body": "$companyName - Call Closed",
+              "time": time.substring(
+                0,
+                time.lastIndexOf("."),
+              ),
+              "companyID": event.updatedData.companyID,
+              "dataCollectionId": event.updatedData.docId,
+              "marketCollectionId": event.updatedData.marketTypeId,
+              "digits": digits
+            });
+          } else {
+            commentList.add(Comment("Call Updated", time).toMap());
+            updateTime = true;
+            firestore.collection("notification").add({
+              "title": "TradingKaFunda",
+              "body": "$companyName - Call Updated",
+              "time": time.substring(
+                0,
+                time.lastIndexOf("."),
+              ),
+              "companyID": event.updatedData.companyID,
+              "dataCollectionId": event.updatedData.docId,
+              "marketCollectionId": event.updatedData.marketTypeId,
+              "digits": digits
+            });
+          }
         }
       }
       event.updatedData.commentList = commentList;
