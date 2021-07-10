@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tradingkafundaadmin/bloc/bloc/deletecompany_bloc.dart';
 import 'package:tradingkafundaadmin/bloc/bloc/editcompany_bloc.dart';
-import 'package:tradingkafundaadmin/bloc/bloc/viewcompany_bloc.dart';
 import 'package:tradingkafundaadmin/color/colors.dart';
 import 'package:tradingkafundaadmin/screens/deleteCompany.dart';
 import 'package:tradingkafundaadmin/screens/editCompany.dart';
@@ -20,18 +19,28 @@ List<Color> colorList = [
   Colors.teal
 ];
 
-class ViewCompany extends StatefulWidget {
+class ViewCompany extends StatelessWidget {
   const ViewCompany({Key key}) : super(key: key);
 
-  @override
-  _ViewCompanyState createState() => _ViewCompanyState();
-}
+  Color getRandomColor() {
+    Random random = Random();
+    int index = random.nextInt(6);
+    return colorList[index];
+  }
 
-class _ViewCompanyState extends State<ViewCompany> {
-  @override
-  void initState() {
-    BlocProvider.of<ViewcompanyBloc>(context).add(FetchViewCompanyEvent());
-    super.initState();
+  Future<List<Map<String, String>>> getDetails(String companyId) async {
+    List<Map<String, String>> markets = List();
+    var firestore = FirebaseFirestore.instance;
+    var marketData = await firestore.collection("marketType").get();
+    for (var doc in marketData.docs) {
+      var snapData =
+          await firestore.collection("marketType/${doc.id}/data").get();
+      for (var snapDoc in snapData.docs) {
+        if (snapDoc["companyID"] == companyId)
+          markets.add({doc["name"]: snapDoc.id});
+      }
+    }
+    return markets;
   }
 
   @override
@@ -43,108 +52,122 @@ class _ViewCompanyState extends State<ViewCompany> {
             height: 20,
           ),
           Expanded(
-              child: BlocConsumer<ViewcompanyBloc, ViewcompanyState>(
-            listener: (context, state) {},
-            builder: (context, state) {
-              if (state is ViewcompanyInitial) {
-                return Container(
-                  child: Center(
+            child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("companyMaster")
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<QueryDocumentSnapshot> dataSnapshots =
+                        snapshot.data.documents;
+                    if (dataSnapshots.isNotEmpty) {
+                      return ListView.separated(
+                        separatorBuilder: (context, index) {
+                          return Container(
+                            height: 1,
+                            color: Colors.grey,
+                            width: MediaQuery.of(context).size.width,
+                          );
+                        },
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            onTap: () {},
+                            subtitle: Container(
+                              height: 30,
+                              child: FutureBuilder<List<Map<String, String>>>(
+                                future: getDetails(dataSnapshots[index].id),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData)
+                                    return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                            child: Text(
+                                                "Markets : ${snapshot.data.asMap().values.toList().map((e) => e.keys.first).toList().join(", ")}")),
+                                        FlatButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        BlocProvider(
+                                                      create: (context) =>
+                                                          EditcompanyBloc(),
+                                                      child: EditCompany(
+                                                        companyId:
+                                                            dataSnapshots[index]
+                                                                .id,
+                                                        markets: snapshot.data,
+                                                      ),
+                                                    ),
+                                                  ));
+                                            },
+                                            child: Text("Edit")),
+                                        Text(" | "),
+                                        FlatButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (_) =>
+                                                          BlocProvider(
+                                                              create: (context) =>
+                                                                  DeletecompanyBloc(),
+                                                              child:
+                                                                  DeleteCompany(
+                                                                companyId:
+                                                                    dataSnapshots[
+                                                                            index]
+                                                                        .id,
+                                                                markets:
+                                                                    snapshot
+                                                                        .data,
+                                                              ))));
+                                            },
+                                            child: Text("Delete"))
+                                      ],
+                                    );
+                                  else
+                                    return CupertinoActivityIndicator(
+                                      animating: true,
+                                    );
+                                },
+                              ),
+                            ),
+                            leading: CircleAvatar(
+                              child: Text(
+                                dataSnapshots[index]["name"][0],
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              backgroundColor: Colors.orange,
+                            ),
+                            title: Text(dataSnapshots[index]["name"]),
+                          );
+                        },
+                        itemCount: dataSnapshots.length,
+                      );
+                    } else {
+                      return Container(
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(ColorValues.blue),
+                        ),
+                      );
+                    }
+                  }
+                  return Container(
+                    alignment: Alignment.center,
                     child: CircularProgressIndicator(
                       valueColor:
                           AlwaysStoppedAnimation<Color>(ColorValues.blue),
                     ),
-                  ),
-                );
-              } else if (state is ViewcompanyLoaded) {
-                return ListView.separated(
-                    separatorBuilder: (context, index) {
-                      return Container(
-                        height: 1,
-                        color: Colors.grey,
-                        width: MediaQuery.of(context).size.width,
-                      );
-                    },
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        onTap: () {},
-                        subtitle: Container(
-                          height: 30,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                    "Markets : ${getMarketsName(state.companiesList[index].getMarketsList)}"),
-                              ),
-                              FlatButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) => BlocProvider(
-                                                  create: (context) =>
-                                                      EditcompanyBloc(),
-                                                  child: EditCompany(
-                                                    companyId: state
-                                                        .companiesList[index]
-                                                        .getCompanyId,
-                                                    markets: state
-                                                        .companiesList[index]
-                                                        .getMarketsList,
-                                                  ),
-                                                )));
-                                  },
-                                  child: Text("Edit")),
-                              Text(" | "),
-                              FlatButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) => BlocProvider(
-                                                  create: (context) =>
-                                                      DeletecompanyBloc(),
-                                                  child: DeleteCompany(
-                                                    companyId: state
-                                                        .companiesList[index]
-                                                        .getCompanyId,
-                                                    markets: state
-                                                        .companiesList[index]
-                                                        .getMarketsList,
-                                                  ),
-                                                )));
-                                  },
-                                  child: Text("Delete"))
-                            ],
-                          ),
-                        ),
-                        leading: CircleAvatar(
-                          child: Text(
-                            state.companiesList[index].getCompanyName()[0],
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          backgroundColor: Colors.orange,
-                        ),
-                        title:
-                            Text(state.companiesList[index].getCompanyName()),
-                      );
-                    },
-                    itemCount: state.companiesList.length);
-              }
-
-              return SizedBox();
-            },
-          ))
+                  );
+                }),
+          ),
         ],
       ),
     );
-  }
-
-  String getMarketsName(List<dynamic> marketsList) {
-    List<String> marketString = [];
-    for (var market in marketsList) {
-      marketString.add(market.keys.first);
-    }
-    return marketString.join(", ");
   }
 }
