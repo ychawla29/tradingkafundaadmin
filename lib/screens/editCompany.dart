@@ -3,12 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toast/toast.dart';
 import 'package:tradingkafundaadmin/bloc/bloc/editcompany_bloc.dart';
 import 'package:tradingkafundaadmin/color/colors.dart';
+import 'package:tradingkafundaadmin/constants/marketConstants.dart';
 import 'package:tradingkafundaadmin/model/model.dart';
 
 class EditCompany extends StatefulWidget {
   EditCompany({Key key, this.companyId, this.markets}) : super(key: key);
   final String companyId;
-  final List<Map<String, String>> markets;
+  final List<dynamic> markets;
   @override
   _EditCompanyState createState() => _EditCompanyState();
 }
@@ -29,7 +30,7 @@ class _EditCompanyState extends State<EditCompany> {
         .asMap()
         .values
         .toList()
-        .map((e) => e.keys.first)
+        .map((e) => e.keys.first.toString())
         .toList();
     BlocProvider.of<EditcompanyBloc>(context)
         .add(FetchCompanyDetailsEvent(widget.companyId));
@@ -106,12 +107,31 @@ class _EditCompanyState extends State<EditCompany> {
                       Company company = Company();
                       company.setCompanyName(nameController.text);
                       company.setShortName(shortNameController.text);
-                      List<String> marketslist = List();
-                      if (equity) marketslist.add("Equity");
-                      if (future) marketslist.add("Futures");
-                      if (commodity) marketslist.add("Commodity");
-                      if (forex) marketslist.add("Forex");
-                      if (option) marketslist.add("Options");
+                      List<Map<String, String>> marketslist = List();
+                      if (equity)
+                        marketslist.add({"Equity": MarketConstants.EQUITY});
+                      if (future)
+                        marketslist.add({"Futures": MarketConstants.FUTURES});
+                      if (commodity)
+                        marketslist
+                            .add({"Commodity": MarketConstants.COMMODITY});
+                      if (forex)
+                        marketslist.add({"Forex": MarketConstants.FOREX});
+                      if (option)
+                        marketslist.add({"Options": MarketConstants.OPTIONS});
+                      for (var market in markets) {
+                        if (market == "Equity")
+                          marketslist.add({"Equity": MarketConstants.EQUITY});
+                        if (market == "Futures")
+                          marketslist.add({"Futures": MarketConstants.FUTURES});
+                        if (market == "Commodity")
+                          marketslist
+                              .add({"Commodity": MarketConstants.COMMODITY});
+                        if (market == "Forex")
+                          marketslist.add({"Forex": MarketConstants.FOREX});
+                        if (market == "Options")
+                          marketslist.add({"Options": MarketConstants.OPTIONS});
+                      }
                       company.setMarketsList = marketslist;
                       BlocProvider.of<EditcompanyBloc>(context)
                           .add(SaveCompanyEvent(widget.companyId, company));
@@ -245,6 +265,8 @@ class _EditCompanyState extends State<EditCompany> {
               ],
             ),
           );
+        } else {
+          return SizedBox();
         }
       }),
     );

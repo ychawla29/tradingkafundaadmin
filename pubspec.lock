@@ -65,7 +65,7 @@ packages:
     source: hosted
     version: "0.2.0+5"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       url: "https://pub.dartlang.org"

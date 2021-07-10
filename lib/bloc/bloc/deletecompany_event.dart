@@ -15,12 +15,13 @@ class FetchCompanyDetailsEvent extends DeletecompanyEvent {
 
 class DeleteCompanyFromAll extends DeletecompanyEvent {
   final String companyId;
-  final List<Map<String, String>> companyIds;
+  final List<Map<String, dynamic>> companyIds;
   DeleteCompanyFromAll({this.companyIds, this.companyId});
 }
 
 class DeleteCompanyEvent extends DeletecompanyEvent {
   final String companyId;
-  final List<Map<String, String>> companyIds;
-  DeleteCompanyEvent({this.companyId, this.companyIds});
+  final List<Map<String, dynamic>> companyIds;
+  final List<String> activeMarkets;
+  DeleteCompanyEvent({this.companyId, this.companyIds, this.activeMarkets});
 }

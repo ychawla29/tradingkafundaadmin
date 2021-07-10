@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:tradingkafundaadmin/constants/marketConstants.dart';
 
 part 'deletecompany_event.dart';
 part 'deletecompany_state.dart';
@@ -60,6 +61,21 @@ class DeletecompanyBloc extends Bloc<DeletecompanyEvent, DeletecompanyState> {
   Stream<DeletecompanyState> mapDeleteCompany(DeleteCompanyEvent event) async* {
     yield DeletecompanyInitial();
     var firestore = FirebaseFirestore.instance;
+    List<Map<String, String>> marketslist = [];
+    for (var market in event.activeMarkets) {
+      if (market == "Equity")
+        marketslist.add({"Equity": MarketConstants.EQUITY});
+      if (market == "Futures")
+        marketslist.add({"Futures": MarketConstants.FUTURES});
+      if (market == "Commodity")
+        marketslist.add({"Commodity": MarketConstants.COMMODITY});
+      if (market == "Forex") marketslist.add({"Forex": MarketConstants.FOREX});
+      if (market == "Options")
+        marketslist.add({"Options": MarketConstants.OPTIONS});
+    }
+    var companyReference = await firestore
+        .doc("companyMaster/${event.companyId}")
+        .update({"markets": marketslist});
     var marketDetails = await firestore.collection("marketType").get();
     for (var marketData in marketDetails.docs) {
       for (var deleteData in event.companyIds) {

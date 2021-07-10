@@ -12,7 +12,7 @@ class DeleteCompany extends StatefulWidget {
   _DeleteCompanyState createState() => _DeleteCompanyState();
 
   final String companyId;
-  final List<Map<String, String>> markets;
+  final List<dynamic> markets;
 }
 
 class _DeleteCompanyState extends State<DeleteCompany> {
@@ -31,7 +31,7 @@ class _DeleteCompanyState extends State<DeleteCompany> {
         .asMap()
         .values
         .toList()
-        .map((e) => e.keys.first)
+        .map((e) => e.keys.first.toString())
         .toList();
     BlocProvider.of<DeletecompanyBloc>(context)
         .add(FetchCompanyDetailsEvent(widget.companyId));
@@ -124,8 +124,10 @@ class _DeleteCompanyState extends State<DeleteCompany> {
                         equity = value;
                         if (!value) {
                           discardMarkets.add("Equity");
+                          markets.remove("Equity");
                         } else {
                           discardMarkets.remove("Equity");
+                          markets.add("Equity");
                         }
                       });
                     }),
@@ -135,8 +137,10 @@ class _DeleteCompanyState extends State<DeleteCompany> {
                         future = value;
                         if (!value) {
                           discardMarkets.add("Futures");
+                          markets.remove("Futures");
                         } else {
                           discardMarkets.remove("Futures");
+                          markets.add("Futures");
                         }
                       });
                     }),
@@ -146,8 +150,10 @@ class _DeleteCompanyState extends State<DeleteCompany> {
                         option = value;
                         if (!value) {
                           discardMarkets.add("Options");
+                          markets.remove("Options");
                         } else {
                           discardMarkets.remove("Options");
+                          markets.add("Options");
                         }
                       });
                     }),
@@ -157,8 +163,10 @@ class _DeleteCompanyState extends State<DeleteCompany> {
                         commodity = value;
                         if (!value) {
                           discardMarkets.add("Commodity");
+                          markets.remove("Commodity");
                         } else {
                           discardMarkets.remove("Commodity");
+                          markets.add("Commodity");
                         }
                       });
                     }),
@@ -168,8 +176,10 @@ class _DeleteCompanyState extends State<DeleteCompany> {
                         forex = value;
                         if (!value) {
                           discardMarkets.add("Forex");
+                          markets.remove("Forex");
                         } else {
                           discardMarkets.remove("Forex");
+                          markets.add("Forex");
                         }
                       });
                     }),
@@ -197,7 +207,7 @@ class _DeleteCompanyState extends State<DeleteCompany> {
                                   ),
                                   FlatButton(
                                       onPressed: () {
-                                        List<Map<String, String>> companyIds =
+                                        List<Map<String, dynamic>> companyIds =
                                             List();
                                         for (var marketData in widget.markets) {
                                           if (discardMarkets.contains(
@@ -213,6 +223,7 @@ class _DeleteCompanyState extends State<DeleteCompany> {
                                           DeleteCompanyEvent(
                                             companyId: widget.companyId,
                                             companyIds: companyIds,
+                                            activeMarkets: markets,
                                           ),
                                         );
                                         Navigator.pop(context);

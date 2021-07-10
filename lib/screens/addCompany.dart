@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toast/toast.dart';
 import 'package:tradingkafundaadmin/bloc/bloc/addcompany_bloc.dart';
 import 'package:tradingkafundaadmin/color/colors.dart';
+import 'package:tradingkafundaadmin/constants/marketConstants.dart';
 import 'package:tradingkafundaadmin/model/model.dart';
 
 class AddCompany extends StatefulWidget {
@@ -90,12 +91,18 @@ class _AddCompanyState extends State<AddCompany> {
                       Company company = Company();
                       company.setCompanyName(nameController.text);
                       company.setShortName(shortNameController.text);
-                      List<String> marketslist = List();
-                      if (equity) marketslist.add("Equity");
-                      if (future) marketslist.add("Futures");
-                      if (commodity) marketslist.add("Commodity");
-                      if (forex) marketslist.add("Forex");
-                      if (option) marketslist.add("Options");
+                      List<Map<String, String>> marketslist = List();
+                      if (equity)
+                        marketslist.add({"Equity": MarketConstants.EQUITY});
+                      if (future)
+                        marketslist.add({"Futures": MarketConstants.FUTURES});
+                      if (commodity)
+                        marketslist
+                            .add({"Commodity": MarketConstants.COMMODITY});
+                      if (forex)
+                        marketslist.add({"Forex": MarketConstants.FOREX});
+                      if (option)
+                        marketslist.add({"Options": MarketConstants.OPTIONS});
                       company.setMarketsList = marketslist;
                       if (marketslist.isEmpty)
                         Toast.show('Market type cannot be empty', context,
@@ -220,6 +227,11 @@ class _AddCompanyState extends State<AddCompany> {
             ),
           );
         else if (state is AddcompanyBusyState) {
+          return Center(
+            child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(ColorValues.blue)),
+          );
+        } else {
           return Center(
             child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(ColorValues.blue)),

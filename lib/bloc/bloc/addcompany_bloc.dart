@@ -31,7 +31,7 @@ class AddcompanyBloc extends Bloc<AddcompanyEvent, AddcompanyState> {
       var marketCollection = await firestore.collection("marketType").get();
       for (var marketname in event.company.marketsList) {
         for (var market in marketCollection.docs) {
-          if (market["name"] == marketname) {
+          if (market["name"] == marketname.keys.first) {
             var marketReference = await firestore
                 .collection("marketType/${market.id}/data")
                 .add({"isNew": true, "companyID": reference.id});

@@ -69,4 +69,22 @@ class MarketTypeData {
   DateTime get updatedOn => _updatedOn;
 
   set updatedOn(DateTime value) => _updatedOn;
+
+  @override
+  bool operator ==(covariant MarketTypeData other) {
+    Function deepEq = const DeepCollectionEquality().equals;
+    return callType == other.callType &&
+        docId == other.docId &&
+        isNew == other.isNew &&
+        marketTypeId == other.marketTypeId &&
+        marketTypeName == other.marketTypeName &&
+        callType == other.callType &&
+        companyID == other.companyID &&
+        entryRate == other.entryRate &&
+        updatedOn == other.updatedOn &&
+        deepEq(targetList, other.targetList);
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tradingkafundaadmin/bloc/bloc/addcompany_bloc.dart';
 import 'package:tradingkafundaadmin/bloc/bloc/managemarket_bloc.dart';
+import 'package:tradingkafundaadmin/bloc/bloc/viewcompany_bloc.dart';
 import 'package:tradingkafundaadmin/main.dart';
 
 class LoginPage extends StatefulWidget {
@@ -112,7 +113,10 @@ class _LoginPageState extends State<LoginPage> {
                                                           ManagemarketBloc()),
                                                   BlocProvider(
                                                       create: (context) =>
-                                                          AddcompanyBloc())
+                                                          AddcompanyBloc()),
+                                                  BlocProvider(
+                                                      create: (context) =>
+                                                          ViewcompanyBloc()),
                                                 ],
                                                 child: MyHomePage(
                                                     title:

@@ -155,11 +155,19 @@ class _ManageScreenState extends State<ManageScreen> {
                 .companyName;
           }
           if (state.message != null) {
-            Toast.show('Market details updated successfully', context,
+            if(state.message == "List Updated") {
+              Toast.show('Market details updated successfully', context,
                 backgroundColor: Colors.blue,
                 textColor: Colors.white,
                 gravity: Toast.BOTTOM,
                 duration: Toast.LENGTH_SHORT);
+            } else if(state.message == "Default") {
+              Toast.show('No value updated', context,
+                backgroundColor: Colors.blue,
+                textColor: Colors.white,
+                gravity: Toast.BOTTOM,
+                duration: Toast.LENGTH_SHORT);
+            }
           }
           if (state.selectedData != null) {
             if (!state.selectedData.isNew) {
