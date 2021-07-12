@@ -7,14 +7,14 @@ const RESOURCES = {
 "assets/FontManifest.json": "dc3d03800ccca4601324923c0b1d6d57",
 "assets/fonts/MaterialIcons-Regular.otf": "1288c9e28052e028aba623321f7826ac",
 "assets/images/tradingkafundalogo.jpg": "121ec712db2279a1ae07555bbbb56c22",
-"assets/NOTICES": "304f6410de308b886e6d51e5f895450a",
+"assets/NOTICES": "4ad5d7b15a165d7973f7b6383c0914d2",
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "b14fcf3ee94e3ace300b192e9e7c8c5d",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
-"index.html": "5c7e13bd99ecf64e79077569e2988320",
-"/": "5c7e13bd99ecf64e79077569e2988320",
-"main.dart.js": "ec35bf54d72b003c5f58242e69657127",
+"index.html": "1c3ae4320efd326f33e313e22b21697b",
+"/": "1c3ae4320efd326f33e313e22b21697b",
+"main.dart.js": "6654efb8491c0cbc9d576dfe89c8eb8d",
 "manifest.json": "89da6edc9a9b270b5938a7beaeaecf73",
 "version.json": "7b171daeb99a61922784784988424556"
 };
